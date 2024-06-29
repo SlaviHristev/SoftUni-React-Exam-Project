@@ -1,0 +1,32 @@
+.home {
+    display: flex;
+    height: 100%;
+
+    .textContainer {
+        flex: 3;
+
+        .wrapper {
+            padding-right: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 50px;
+            height: 50%;
+        }
+    }
+
+    .imgContainer {
+        flex: 2;
+        position: relative;
+        display: flex;
+        align-items: center;
+        background-color: rgb(241, 241, 241);
+
+        img {
+            width: 130%;
+            position: absolute;
+            right: 0;
+            top: 10px;
+        }
+    }
+}
