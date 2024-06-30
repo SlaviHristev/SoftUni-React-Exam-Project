@@ -5,6 +5,7 @@ import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
 import Catalog from './pages/Catalog/Catalog'
 import About from './pages/About/About'
+import Contact from './pages/Contact/Contact'
 
 function App() {
   const router = createBrowserRouter([
@@ -33,6 +34,10 @@ function App() {
         {
           path:'/about',
           element: <About/>
+        },
+        {
+          path:'/contact',
+          element:<Contact/>
         }
       ]
     }
