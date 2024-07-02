@@ -1,11 +1,40 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './login.scss'
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 
 const Login = () => {
+
+  const {updateUser} = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const username = formData.get('username');
+      const password = formData.get('password');
+
+      try {
+        const res = await apiRequest.post('/auth/login',{
+            username,password
+        });
+
+        updateUser(res.data)
+
+        navigate('/');
+    } catch (err) {
+        console.log(err);
+        setError(err.response.data.message)
+    }
+  }
+
   return (
     <div className='login'>
         <div className="formContainer">
-            <form>
+            <form onSubmit={handleSubmit}>
                 <h1>Welcome back</h1>
                 <input type="text" name='username' placeholder='Usename' required/>
                 <input type="password" name='password' placeholder='Password' required/>
