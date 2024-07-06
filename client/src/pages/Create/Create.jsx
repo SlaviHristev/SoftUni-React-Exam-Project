@@ -13,14 +13,22 @@ const Create = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        formData.append('description', value);
+        const inputs = Object.fromEntries(formData);
 
         try {
-            const res = await apiRequest.post('/posts', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            const res = await apiRequest.post('/posts', {data :{
+                title: inputs.title,
+                price: parseInt(inputs.price),
+                yearOfMake: parseInt(inputs.yearOfMake),
+                horsePower: parseInt(inputs.horsePower),
+                color: inputs.color,
+                city: inputs.city,
+                category: inputs.category,
+                fuelType: inputs.fuelType,
+                transmission: inputs.transmission,
+                description: value,
+                images: images
+            }});
             navigate('/catalog');
         } catch (error) {
             console.log(error);

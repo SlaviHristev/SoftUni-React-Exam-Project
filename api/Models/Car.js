@@ -9,17 +9,17 @@ const carSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: [true, 'Price is required!'],
-        min: [1, 'Price should be at least 1!']
+        minlength: [1, 'Price should be at least 1!']
     },
     yearOfMake: {
         type: Number,
         required: [true, 'Year of Make is required!'],
-        min: [1, 'Year of Make should be at least 1!']
+        minlength: [1, 'Year of Make should be at least 1!']
     },
     horsePower: {
         type: Number,
         required: [true, 'Engine Power is required!'],
-        min: [1, 'Engine Power should be at least 1!']
+        minlength: [1, 'Engine Power should be at least 1!']
     },
     color: {
         type: String,

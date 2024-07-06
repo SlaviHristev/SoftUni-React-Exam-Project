@@ -1,36 +1,17 @@
 import Car from "../Models/Car.js";
 
-
-export const addPost = async(req,res) =>{
-    const {
-        title,
-        price,
-        yearOfMake,
-        horsePower,
-        color,
-        city,
-        category,
-        fuelType,
-        transmission,
-        description,
-        images
-    } = req.body;
+export const addPost = async (req, res) => {
+  
+    const newPost = new Car({
+        ownerId: req.userId,
+        ...req.body.data,
+    })
+    console.log(req.body.data);
     const tokenUserId = req.userId;
+    console.log(req.userId);
     try {
-        const newPost = await Car.create({
-            title,
-            price,
-            yearOfMake,
-            horsePower,
-            color,
-            city,
-            category,
-            fuelType,
-            transmission,
-            description,
-            images,
-            ownerId: tokenUserId
-        });
+       const post = await newPost.save();
+
         res.status(201).json({
             message: "Post created successfully!",
             post: newPost
@@ -38,7 +19,8 @@ export const addPost = async(req,res) =>{
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            message: "Failed to create post!"
-        });   
+            message: "Failed to create post!",
+            error: error.message 
+        });
     }
-}
+};
