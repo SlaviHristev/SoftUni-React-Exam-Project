@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import './login.scss'
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import apiRequest from '../../lib/apiRequest';
 
 const Login = () => {
 
