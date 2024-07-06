@@ -6,9 +6,7 @@ export const addPost = async (req, res) => {
         ownerId: req.userId,
         ...req.body.data,
     })
-    console.log(req.body.data);
-    const tokenUserId = req.userId;
-    console.log(req.userId);
+   
     try {
        const post = await newPost.save();
 
@@ -22,5 +20,17 @@ export const addPost = async (req, res) => {
             message: "Failed to create post!",
             error: error.message 
         });
+    }
+};
+
+export const getPosts = async(req,res) =>{
+    
+    try{
+        const posts = await Car.find();
+
+        res.status(200).json(posts);
+    }catch(error){
+        console.log(error);
+        res.status(500).json({ message: "Failed to get posts" });
     }
 };
