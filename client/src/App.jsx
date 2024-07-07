@@ -7,6 +7,7 @@ import Catalog from './pages/Catalog/Catalog'
 import About from './pages/About/About'
 import Contact from './pages/Contact/Contact'
 import Create from './pages/Create/Create'
+import SinglePage from './pages/SinglePage/SinglePage'
 
 function App() {
   const router = createBrowserRouter([
@@ -39,7 +40,11 @@ function App() {
         {
           path: '/contact',
           element: <Contact />
-        }
+        },
+        {
+          path: '/:id',
+          element: <SinglePage />
+        },
       ]
     },
     {

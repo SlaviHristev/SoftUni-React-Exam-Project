@@ -25,9 +25,8 @@ const Catalog = () => {
         <h2>Choose a car of your liking!</h2>
         <div className="wrapper">
           {posts.map(post => (
-            <Card key={post.id} item={post} />
+            <Card key={post._id} item={post} />
           ))}
-          {console.log(posts)}
         </div>
       </div>
     </div>

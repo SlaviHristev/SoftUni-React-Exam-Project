@@ -34,3 +34,20 @@ export const getPosts = async(req,res) =>{
         res.status(500).json({ message: "Failed to get posts" });
     }
 };
+
+
+export const getPost = async(req,res) =>{
+    const id = req.params.id;
+    try {
+        const post = await Car.findById(id);
+
+        if(!post){
+            return res.status(404).json({message:"Post not found!"});
+        }
+        console.log(post);
+        res.status(200).json(post);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Failed to get post" });
+    }
+}
