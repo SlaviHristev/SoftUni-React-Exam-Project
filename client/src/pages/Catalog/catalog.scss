@@ -4,14 +4,16 @@
 
     .container{
         height: 100%;
-
+        
         .wrapper{
-            height: 100%;
+            padding-top: 30px;
             padding-left: 20px;
             display: flex;
-            gap: 50px;
+            flex-wrap: wrap;
+            gap: 40px;
             overflow-y: scroll;
             padding-bottom: 50px;
+            box-sizing: border-box;
         }
     }
 }
