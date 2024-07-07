@@ -1,14 +1,14 @@
 import Car from "../Models/Car.js";
 
 export const addPost = async (req, res) => {
-  
+
     const newPost = new Car({
         ownerId: req.userId,
         ...req.body.data,
     })
-   
+
     try {
-       const post = await newPost.save();
+        const post = await newPost.save();
 
         res.status(201).json({
             message: "Post created successfully!",
@@ -18,31 +18,31 @@ export const addPost = async (req, res) => {
         console.error(error);
         res.status(500).json({
             message: "Failed to create post!",
-            error: error.message 
+            error: error.message
         });
     }
 };
 
-export const getPosts = async(req,res) =>{
-    
-    try{
+export const getPosts = async (req, res) => {
+
+    try {
         const posts = await Car.find();
 
         res.status(200).json(posts);
-    }catch(error){
+    } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Failed to get posts" });
     }
 };
 
 
-export const getPost = async(req,res) =>{
+export const getPost = async (req, res) => {
     const id = req.params.id;
     try {
         const post = await Car.findById(id);
 
-        if(!post){
-            return res.status(404).json({message:"Post not found!"});
+        if (!post) {
+            return res.status(404).json({ message: "Post not found!" });
         }
         console.log(post);
         res.status(200).json(post);
@@ -52,21 +52,41 @@ export const getPost = async(req,res) =>{
     }
 }
 
-export const deletePost = async(req,res) =>{
+export const deletePost = async (req, res) => {
     const id = req.params.id;
     const tokenUserId = req.userId;
-    console.log(tokenUserId);
 
     try {
         const post = await Car.findById(id);
-        if(post.ownerId.toString() !== tokenUserId) {
-            return res.status(403).json({message: "Not Authorized!"});
+        if (post.ownerId.toString() !== tokenUserId) {
+            return res.status(403).json({ message: "Not Authorized!" });
         }
 
-        await Car.deleteOne({_id: id});
-        res.status(200).json({message: "Post deleted!"})
+        await Car.deleteOne({ _id: id });
+        res.status(200).json({ message: "Post deleted!" })
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Failed to delete post" })
+    }
+}
+
+export const updatePost = async (req, res) => {
+    const id = req.params.id;
+    const tokenUserId = req.userId;
+    const updatedData = req.body;
+    try {
+        const post = await Car.findById(id);
+        if (post.ownerId.toString() !== tokenUserId) {
+            return res.status(403).json({ message: "Not Authorized!" });
+        }
+
+        const updatedPost = await Car.findByIdAndUpdate(id, updatedData, { new: true });
+        res.status(200).json(updatedPost);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Failed to update post" });
+
+
     }
 }
