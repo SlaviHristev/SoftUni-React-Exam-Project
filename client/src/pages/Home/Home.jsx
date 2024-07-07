@@ -1,6 +1,25 @@
+import { useEffect, useState } from 'react';
 import './home.scss'
+import apiRequest from '../../lib/apiRequest';
 
 const Home = () => {
+
+    const [recentCars, setRecentCars] = useState([]);
+
+    useEffect(() => {
+        const recentFetchedCars = async() =>{
+            try {
+                const response = await apiRequest.get('/posts/recent');
+                setRecentCars(response.data);
+            } catch (error) {
+                console.error('Failed to fetch recent cars:', error);
+                
+            }
+
+            recentFetchedCars();
+        }
+    },[]);
+
     return (
         <div className='home'>
 
