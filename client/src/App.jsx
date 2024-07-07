@@ -8,6 +8,7 @@ import About from './pages/About/About'
 import Contact from './pages/Contact/Contact'
 import Create from './pages/Create/Create'
 import SinglePage from './pages/SinglePage/SinglePage'
+import Edit from './pages/Edit/Edit'
 
 function App() {
   const router = createBrowserRouter([
@@ -54,7 +55,12 @@ function App() {
         {
           path: '/create',
           element: <Create />
-        }
+        },
+         {
+          path: '/edit/:id',
+          element: <Edit/>
+        },
+
       ]
     }
   ])
