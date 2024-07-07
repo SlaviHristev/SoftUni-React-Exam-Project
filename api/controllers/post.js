@@ -51,3 +51,22 @@ export const getPost = async(req,res) =>{
         return res.status(500).json({ message: "Failed to get post" });
     }
 }
+
+export const deletePost = async(req,res) =>{
+    const id = req.params.id;
+    const tokenUserId = req.userId;
+    console.log(tokenUserId);
+
+    try {
+        const post = await Car.findById(id);
+        if(post.ownerId.toString() !== tokenUserId) {
+            return res.status(403).json({message: "Not Authorized!"});
+        }
+
+        await Car.deleteOne({_id: id});
+        res.status(200).json({message: "Post deleted!"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Failed to delete post" })
+    }
+}

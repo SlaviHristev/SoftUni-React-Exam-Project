@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './singlePage.scss'
 import apiRequest from '../../lib/apiRequest';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from '../../components/Slider/Slider';
 import DOMPurify from 'dompurify'
 
@@ -11,6 +11,7 @@ const SinglePage = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getPost = async () => {
@@ -32,6 +33,16 @@ const SinglePage = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!post) return <div>No post data</div>;
+
+  const deletePost = async () => {
+    try {
+      await apiRequest.delete(`/posts/${id}`);
+      navigate('/catalog')
+    } catch (error) {
+       console.error('Failed to delete post:', error);
+      setError('Failed to delete post');
+    }
+  }
 
   return (
     <div className='singlePage'>
@@ -107,6 +118,16 @@ const SinglePage = () => {
             </div>
           </div>
           <div className="buttons">
+            <Link to={`/edit/${post._id}`}>
+              <button>
+                <img src="/edit.png" alt="" />
+                Edit
+              </button>
+            </Link>
+            <button onClick={deletePost}>
+              <img src="/delete.png" alt="" />
+              Delete
+            </button>
             <button>
               <img src="/chat.png" alt="" />
               Send a Message
