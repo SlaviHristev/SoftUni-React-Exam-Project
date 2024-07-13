@@ -24,7 +24,7 @@ const ProfileUpdate = () => {
                     avatar: avatar[0]
                 });
             updateUser(res.data);
-            navigate('/prafile');
+            navigate('/profile');
         } catch (error) {
             console.log(error);
         }
