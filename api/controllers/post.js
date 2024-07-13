@@ -100,3 +100,15 @@ export const getRecent = async (req, res) => {
         res.status(500).json({ message: "Failed to get posts" });
     }
 };
+
+
+export const getPostsByUser = async(req,res) =>{
+    try {
+      const userId = req.params.userId;
+      const posts =  await Car.find({userId: userId}).sort({createdAt: -1});
+      res.status(200).json(posts)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Failed to get user posts" });
+    }
+  }

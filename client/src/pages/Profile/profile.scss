@@ -19,7 +19,8 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-
+                flex-direction: column;
+                gap: 15px;
                 h1{
                     font-weight: 300;
                 }
@@ -30,11 +31,16 @@
                     cursor: pointer;
                     border: none;
                 }
+                .posts{
+                    .post{
+                        padding: 10px;
+                    }
+                }
             }
             .info{
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
+                gap: 30px;
 
                 span{
                     display: flex;
