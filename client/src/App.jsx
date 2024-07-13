@@ -10,6 +10,8 @@ import Create from './pages/Create/Create'
 import SinglePage from './pages/SinglePage/SinglePage'
 import Edit from './pages/Edit/Edit'
 import Profile from './pages/Profile/Profile'
+import ProfileUpdate from './pages/ProfileUpdate/ProfileUpdate'
+
 
 function App() {
   const router = createBrowserRouter([
@@ -64,6 +66,10 @@ function App() {
         {
           path:'/profile',
           element:<Profile/>
+        },
+        {
+          path:'/profile/update',
+          element:<ProfileUpdate/>
         },
 
       ]
