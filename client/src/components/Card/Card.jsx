@@ -66,7 +66,7 @@ const Card = ({ item }) => {
                             <span>{item.yearOfMake}</span>
                         </div>
                     </div>
-                    {!isOwner && (
+                    {!isOwner && currentUser && (
                         <div className="icons">
                             <div className="icon" style={{ backgroundColor: isSaved ? "orange" : "inherit" }} onClick={() => handleSavePost(item._id)}>
                                 <img src='/save.png'   alt="Save"  />

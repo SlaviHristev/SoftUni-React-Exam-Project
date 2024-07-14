@@ -161,13 +161,17 @@ const SinglePage = () => {
                 </button>
               </>
             }
-            <button>
-              <img src="/chat.png" alt="" />
-              Send a Message
-            </button>
-            <button onClick={handleSavePost} style={{ backgroundColor: isSaved ? "orange" : "inherit" }}>
-              <img src="/save.png" alt="" />{isSaved ? 'Unsave Post' : 'Save Post'}
-            </button>
+            {!isOwner && currentUser &&
+              <>
+                <button>
+                  <img src="/chat.png" alt="" />
+                  Send a Message
+                </button>
+                <button onClick={handleSavePost} style={{ backgroundColor: isSaved ? "orange" : "inherit" }}>
+                  <img src="/save.png" alt="" />{isSaved ? 'Unsave Post' : 'Save Post'}
+                </button>
+              </>
+            }
           </div>
         </div>
       </div>

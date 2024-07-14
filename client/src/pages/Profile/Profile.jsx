@@ -8,6 +8,7 @@ import Card from '../../components/Card/Card';
 const Profile = () => {
     const { currentUser } = useContext(AuthContext);
     const [userPosts, setUserPosts] = useState([]);
+    const [savedPosts, setSavedPosts] = useState([]);
 
     useEffect(() => {
         const fetchUserPosts = async () => {
@@ -26,7 +27,24 @@ const Profile = () => {
             }
         };
 
+        const fetchSavedPosts = async () => {
+            if (!currentUser) {
+                console.log("Current user is not available");
+                return;
+            }
+            console.log("Fetching saved posts for user:", currentUser._id);
+
+            try {
+                const res = await apiRequest.get(`/users/${currentUser._id}/saved`)
+                console.log("API response:", res.data);
+                setSavedPosts(res.data);
+            } catch (error) {
+                console.error('Failed to fetch saved posts:', error);
+            }
+        }
+
         fetchUserPosts();
+        fetchSavedPosts()
     }, [currentUser]);
 
     console.log("User posts:", userPosts);
@@ -52,21 +70,32 @@ const Profile = () => {
                             <button>Create New Post</button>
                         </Link>
                         <div className="posts">
-                        {
-                        userPosts.length > 0 ? (
-                            userPosts.map(post => (
-                                <div className="post" key={post.id}>
-                                    <Card item={post} />
-                                </div>
-                            ))
-                        ) : (
-                            <p>No Posts Created Yet!</p>
-                        )
-                    }
+                            {
+                                userPosts.length > 0 ? (
+                                    userPosts.map(post => (
+                                        <div className="post" key={post.id}>
+                                            <Card item={post} />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No Posts Created Yet!</p>
+                                )
+                            }
                         </div>
                     </div>
                     <div className="title">
                         <h1>Saved Posts</h1>
+                        <div className="posts">
+                            {savedPosts.length > 0 ? (
+                                savedPosts.map(post => (
+                                    <div className="post" key={post._id}>
+                                        <Card item={post} />
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No Saved Posts!</p>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

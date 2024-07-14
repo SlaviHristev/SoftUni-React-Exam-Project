@@ -63,3 +63,23 @@ export const savePost = async (req, res) => {
         return res.status(500).json({ message: 'Failed to toggle save post' });
     }
 }
+
+
+export const getSavedPosts = async(req,res)=>{
+    const {id} = req.params;
+
+    try {
+        const user = await User.findById(id).populate('savedPosts');
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const savedPosts = user.savedPosts;
+
+        res.status(200).json(savedPosts);
+
+    } catch (error) {
+        console.error('Failed to get saved posts:', error);
+        res.status(500).json({ message: 'Failed to get saved posts' });
+    }
+}
