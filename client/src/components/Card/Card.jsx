@@ -3,10 +3,14 @@ import './card.scss'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import apiRequest from '../../lib/apiRequest'
+import Chat from '../Chat/Chat'
+import Modal from '../Modal/Modal'
+
 
 const Card = ({ item }) => {
     const {currentUser, updateUser} = useContext(AuthContext);
     const [isSaved, setIsSaved] = useState(false);
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
     const isOwner = currentUser?._id === item.ownerId;
 
@@ -38,6 +42,9 @@ const Card = ({ item }) => {
         }
     };
 
+    const handleOpenChat = () => {
+        setIsChatOpen(true);
+    };
     
 
     return (
@@ -71,14 +78,20 @@ const Card = ({ item }) => {
                             <div className="icon" style={{ backgroundColor: isSaved ? "orange" : "inherit" }} onClick={() => handleSavePost(item._id)}>
                                 <img src='/save.png'   alt="Save"  />
                             </div>
-                            <div className="icon">
+                            <div className="icon" onClick={handleOpenChat}>
                                 <img src="/chat.png" alt="Chat" />
                             </div>
                         </div>
                     )}
                 </div>
 
+
             </div>
+                {isChatOpen && (
+                    <Modal onClose={() => setIsChatOpen(false)}>
+                        <Chat/>
+                    </Modal>
+                )}
         </div>
     )
 }
