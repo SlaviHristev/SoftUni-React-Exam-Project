@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './singlePage.scss'
 import apiRequest from '../../lib/apiRequest';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from '../../components/Slider/Slider';
 import DOMPurify from 'dompurify'
+import { AuthContext } from '../../context/AuthContext';
 
 const SinglePage = () => {
-
+  const { currentUser, updateUser } = useContext(AuthContext);
+  const [isSaved, setIsSaved] = useState(false);
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,23 +28,47 @@ const SinglePage = () => {
         setLoading(false);
       }
     };
-
     getPost();
   }, [id]);
+
+  useEffect(() => {
+    if (currentUser && post) {
+      setIsSaved(currentUser.savedPosts.some(savedPost => savedPost._id === post._id));
+    }
+  }, [currentUser, post]);
+
+  const handleSavePost = async () => {
+    try {
+      const res = await apiRequest.post(`/users/save/${id}`, { userId: currentUser._id });
+      const updatedSavedPosts = isSaved
+        ? currentUser.savedPosts.filter(post => post._id !== id)
+        : [...currentUser.savedPosts, post];
+
+      updateUser(prevUser => ({
+        ...prevUser,
+        savedPosts: updatedSavedPosts
+      }));
+      setIsSaved(!isSaved);
+    } catch (error) {
+      console.log('Failed to toggle save post:', error);
+    }
+  };
+
+  const deletePost = async () => {
+    try {
+      await apiRequest.delete(`/posts/${id}`);
+      navigate('/catalog');
+    } catch (error) {
+      console.error('Failed to delete post:', error);
+      setError('Failed to delete post');
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!post) return <div>No post data</div>;
 
-  const deletePost = async () => {
-    try {
-      await apiRequest.delete(`/posts/${id}`);
-      navigate('/catalog')
-    } catch (error) {
-       console.error('Failed to delete post:', error);
-      setError('Failed to delete post');
-    }
-  }
+  const isOwner = currentUser?._id === post.ownerId._id;
 
   return (
     <div className='singlePage'>
@@ -62,7 +88,10 @@ const SinglePage = () => {
                   <p>Price:</p>
                   $ {post.price}</div>
               </div>
-              {/* <div className="user">TODO</div> */}
+              <div className="user">
+                <img src={post.ownerId.avatar || '/noavatar.jpg'} alt="" />
+                <span>{post.ownerId.username}</span>
+              </div>
             </div>
             <div className="bottom" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.description) }}>
               { }
@@ -118,22 +147,26 @@ const SinglePage = () => {
             </div>
           </div>
           <div className="buttons">
-            <Link to={`/edit/${post._id}`}>
-              <button>
-                <img src="/edit.png" alt="" />
-                Edit
-              </button>
-            </Link>
-            <button onClick={deletePost}>
-              <img src="/delete.png" alt="" />
-              Delete
-            </button>
+            {isOwner &&
+              <>
+                <Link to={`/edit/${post._id}`}>
+                  <button>
+                    <img src="/edit.png" alt="" />
+                    Edit
+                  </button>
+                </Link>
+                <button onClick={deletePost}>
+                  <img src="/delete.png" alt="" />
+                  Delete
+                </button>
+              </>
+            }
             <button>
               <img src="/chat.png" alt="" />
               Send a Message
             </button>
-            <button>
-              <img src="/save.png" alt="" />Save Post
+            <button onClick={handleSavePost} style={{ backgroundColor: isSaved ? "orange" : "inherit" }}>
+              <img src="/save.png" alt="" />{isSaved ? 'Unsave Post' : 'Save Post'}
             </button>
           </div>
         </div>

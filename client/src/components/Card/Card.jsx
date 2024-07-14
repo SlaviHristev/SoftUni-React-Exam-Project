@@ -68,8 +68,8 @@ const Card = ({ item }) => {
                     </div>
                     {!isOwner && (
                         <div className="icons">
-                            <div className="icon">
-                                <img src='/save.png'  style={{ backgroundColor: isSaved ? "orange" : "inherit" }} alt="Save" onClick={() => handleSavePost(item._id)} />
+                            <div className="icon" style={{ backgroundColor: isSaved ? "orange" : "inherit" }} onClick={() => handleSavePost(item._id)}>
+                                <img src='/save.png'   alt="Save"  />
                             </div>
                             <div className="icon">
                                 <img src="/chat.png" alt="Chat" />
