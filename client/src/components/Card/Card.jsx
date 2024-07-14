@@ -11,6 +11,8 @@ const Card = ({ item }) => {
     const {currentUser, updateUser} = useContext(AuthContext);
     const [isSaved, setIsSaved] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);
+    const [chatReceiver, setChatReceiver] = useState(null);
+    const [chatId, setChatId] = useState(null);
 
     const isOwner = currentUser?._id === item.ownerId;
 
@@ -42,9 +44,22 @@ const Card = ({ item }) => {
         }
     };
 
-    const handleOpenChat = () => {
-        setIsChatOpen(true);
-    };
+    const handleOpenChat = async () => {
+        try {
+          const res = await apiRequest.get(`/users/${item.ownerId}`);
+          setChatReceiver(res.data);
+
+            const chatResponse = await apiRequest.post('/chats/startChat', {
+                userId1: currentUser._id,
+                userId2: item.ownerId
+            });
+
+           setChatId(chatResponse.data._id);     
+          setIsChatOpen(true);
+        } catch (error) {
+          console.log('Failed to fetch chat receiver:', error);
+        }
+      };
     
 
     return (
@@ -89,7 +104,7 @@ const Card = ({ item }) => {
             </div>
                 {isChatOpen && (
                     <Modal onClose={() => setIsChatOpen(false)}>
-                        <Chat/>
+                        <Chat receiver={chatReceiver} setIsChatOpen={setIsChatOpen} chatId={chatId} currentUser={currentUser}/>
                     </Modal>
                 )}
         </div>

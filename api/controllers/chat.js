@@ -1,17 +1,16 @@
 import Chat from "../Models/Chat.js";
 
-export const addChat = async (req, res) => {
-    const tokenUserId = req.userId; 
-    try {
-        const newChat = new Chat({
-            userIds: [tokenUserId, req.body.receiverId]
-        });
+export const startChat = async (req, res) => {
+    const { userId1, userId2 } = req.body;
 
-        await newChat.save();
-
-        res.status(200).json(newChat);
-    } catch (error) {
-        console.error('Failed to add chat:', error);
-        res.status(500).json({ message: 'Failed to add chat!' });
+  try {
+    let chat = await Chat.findOne({ userIds: { $all: [userId1, userId2] } });
+    if (!chat) {
+      chat = new Chat({ userIds: [userId1, userId2] });
+      await chat.save();
     }
+    res.status(200).json(chat);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to start chat', error });
+  }
 };

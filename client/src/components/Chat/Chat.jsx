@@ -1,36 +1,21 @@
 import { useState } from "react";
 import './chat.scss'
 
-const Chat = () => {
+const Chat = ({
+    receiver,
+    setIsChatOpen
+}) => {
     
 
     return (
       <div className='chat'>
-        <div className="messages">
-          <h1>Messages</h1>
-          <div className="message">
-            <img src='/noavatar.jpg' alt="" />
-            <span>Username</span>
-            <p>Last message preview...</p>
-          </div>
-          <div className="message">
-            <img src='/noavatar.jpg' alt="" />
-            <span>Username</span>
-            <p>Last message preview...</p>
-          </div>
-          <div className="message">
-            <img src='/noavatar.jpg' alt="" />
-            <span>Username</span>
-            <p>Last message preview...</p>
-          </div>
-        </div>
         <div className="chatBox">
           <div className="top">
             <div className="user">
-              <img src='/noavatar.jpg' alt="" />
-              <span>Username</span>
+              <img src={receiver.avatar || '/noavatar.jpg'} alt="" />
+              <span>{receiver.username}</span>
             </div>
-            <span className='close'>X</span>
+            <span className='close' onClick={() => setIsChatOpen(false)}>X</span>
           </div>
           <div className="center">
             <div className="chatMessage" style={{ alignSelf: "flex-end", textAlign: "right" }}>

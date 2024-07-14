@@ -83,3 +83,17 @@ export const getSavedPosts = async(req,res)=>{
         res.status(500).json({ message: 'Failed to get saved posts' });
     }
 }
+
+export const getUser = async(req,res) =>{
+    const {id} = req.params;
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error('Failed to get user:', error);
+        res.status(500).json({ message: 'Failed to get user' });
+    }
+}

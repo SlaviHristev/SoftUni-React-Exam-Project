@@ -1,10 +1,10 @@
 import express from 'express';
 import { verifyToken } from '../middlewares/verifyToken.js';
-import { addChat } from '../controllers/chat.js';
+import { startChat } from '../controllers/chat.js';
 
 const router = express.Router();
 
 
-router.get('/addChat', verifyToken, addChat);
+router.post('/startChat', verifyToken, startChat);
 
 export default router;
