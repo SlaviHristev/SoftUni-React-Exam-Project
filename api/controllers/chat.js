@@ -17,7 +17,7 @@ export const startChat = async (req, res) => {
 
 export const getChatHistory = async(req,res) =>{
     const {chatId} = req.params;
-    console.log(chatId);
+   
     try {
         const chat = await Chat.findById(chatId).populate({
             path: 'messages',

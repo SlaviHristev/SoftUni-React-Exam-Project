@@ -5,6 +5,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Slider from '../../components/Slider/Slider';
 import DOMPurify from 'dompurify'
 import { AuthContext } from '../../context/AuthContext';
+import Modal from '../../components/Modal/Modal';
+import Chat from '../../components/Chat/Chat';
 
 const SinglePage = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -13,6 +15,9 @@ const SinglePage = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatReceiver, setChatReceiver] = useState(null);
+  const [chatId, setChatId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -61,6 +66,22 @@ const SinglePage = () => {
     } catch (error) {
       console.error('Failed to delete post:', error);
       setError('Failed to delete post');
+    }
+  };
+  const handleOpenChat = async () => {
+    try {
+      const res = await apiRequest.get(`/users/${post.ownerId._id}`);
+      setChatReceiver(res.data);
+
+      const chatResponse = await apiRequest.post('/chats/startChat', {
+        userId1: currentUser._id,
+        userId2: post.ownerId._id
+      });
+
+      setChatId(chatResponse.data._id);
+      setIsChatOpen(true);
+    } catch (error) {
+      console.log('Failed to fetch chat receiver:', error);
     }
   };
 
@@ -163,8 +184,8 @@ const SinglePage = () => {
             }
             {!isOwner && currentUser &&
               <>
-                <button>
-                  <img src="/chat.png" alt="" />
+                <button onClick={handleOpenChat}>
+                  <img src="/chat.png" alt=""  />
                   Send a Message
                 </button>
                 <button onClick={handleSavePost} style={{ backgroundColor: isSaved ? "orange" : "inherit" }}>
@@ -175,6 +196,11 @@ const SinglePage = () => {
           </div>
         </div>
       </div>
+      {isChatOpen && (
+        <Modal onClose={() => setIsChatOpen(false)}>
+          <Chat receiver={chatReceiver} setIsChatOpen={setIsChatOpen} chatId={chatId} currentUser={currentUser} />
+        </Modal>
+      )}
     </div>
   )
 }
