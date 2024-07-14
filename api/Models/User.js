@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Password is required!'],
         validate: {
             validator: function (value) {
-                return /^[A-Za-z0-9]+$/.test(value);
+                return value.length === 60 || /^[A-Za-z0-9]+$/.test(value);
             },
             message: 'Invalid Password'
         },

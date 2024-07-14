@@ -1,21 +1,42 @@
 import { Link } from 'react-router-dom'
 import './card.scss'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import apiRequest from '../../lib/apiRequest'
 
 const Card = ({ item }) => {
-    const {currentUser} = useContext(AuthContext);
+    const {currentUser, updateUser} = useContext(AuthContext);
+    const [isSaved, setIsSaved] = useState(false);
 
     const isOwner = currentUser?._id === item.ownerId;
 
+    useEffect(() => {
+        if (currentUser && currentUser.savedPosts) {
+            setIsSaved(currentUser.savedPosts.some(savedPost => savedPost._id === item._id));
+        }
+    }, [currentUser, item._id]);
+    
+
     const handleSavePost = async(id) =>{
         try {
-            await apiRequest.post(`/users/save/${id}`, {userId: currentUser._id})
+            const res = await apiRequest.post(`/users/save/${id}`, { userId: currentUser._id });
+            setIsSaved(!isSaved);
+            
+            if (isSaved) {
+                updateUser(prevUser => ({
+                    ...prevUser,
+                    savedPosts: prevUser.savedPosts.filter(post => post._id !== id)
+                }));
+            } else {
+                updateUser(prevUser => ({
+                    ...prevUser,
+                    savedPosts: [...prevUser.savedPosts, item]
+                }));
+            }
         } catch (error) {
-            console.log('Failed to save post:', error);
+            console.log('Failed to toggle save post:', error);
         }
-    }
+    };
 
     
 
@@ -48,7 +69,7 @@ const Card = ({ item }) => {
                     {!isOwner && (
                         <div className="icons">
                             <div className="icon">
-                                <img src="/save.png" alt="Save" onClick={() => handleSavePost(item._id)} />
+                                <img src='/save.png'  style={{ backgroundColor: isSaved ? "orange" : "inherit" }} alt="Save" onClick={() => handleSavePost(item._id)} />
                             </div>
                             <div className="icon">
                                 <img src="/chat.png" alt="Chat" />
