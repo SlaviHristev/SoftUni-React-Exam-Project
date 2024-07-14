@@ -1,12 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './chat.scss'
+import apiRequest from "../../lib/apiRequest";
 
 const Chat = ({
     receiver,
-    setIsChatOpen
+    setIsChatOpen,
+    chatId,
+    currentUser
 }) => {
     
+    const [messages,setMessages] = useState([]);
+    const [newMessage,setNewMessage] = useState('');
 
+    useEffect(() =>{
+
+        const fetchChatHistory = async() =>{
+            try {
+                const res = await apiRequest.get(`/chats/${chatId}`);
+                setMessages(res.data.messages);
+            } catch (error) {
+                console.log('Failed to fetch chat history:', error);
+            }
+        }
+       fetchChatHistory(); 
+    },[chatId])
     return (
       <div className='chat'>
         <div className="chatBox">

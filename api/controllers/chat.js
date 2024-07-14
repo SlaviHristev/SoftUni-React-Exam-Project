@@ -14,3 +14,20 @@ export const startChat = async (req, res) => {
     res.status(500).json({ message: 'Failed to start chat', error });
   }
 };
+
+export const getChatHistory = async(req,res) =>{
+    const {chatId} = req.params;
+    console.log(chatId);
+    try {
+        const chat = await Chat.findById(chatId).populate({
+            path: 'messages',
+            populate:{
+                path: 'senderId',
+                select: 'username avatar'
+            }
+        });
+        res.status(200).json(chat);
+    } catch (error) {
+        res.status(500).json({message: 'Failed to fetch chat history', error})
+    }
+}

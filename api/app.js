@@ -6,7 +6,9 @@ import dbConnect from './config/dbConfig.js';
 import authRoute from './routes/auth.js';
 import postRoute from './routes/post.js';
 import userRoute from './routes/user.js';
-import chatsRouter from './routes/chat.js';
+import chatsRoute from './routes/chat.js';
+import messagesRoute from './routes/message.js';
+
 
 
 const app = express();
@@ -21,7 +23,8 @@ dbConnect();
 app.use('/api/auth',authRoute);
 app.use('/api/posts', postRoute);
 app.use('/api/users', userRoute);
-app.use('/api/chats', chatsRouter);
+app.use('/api/chats', chatsRoute);
+app.use('/api/messages', messagesRoute);
 
 app.listen(8800, () => {
     console.log('Server is running on port 8880!');
