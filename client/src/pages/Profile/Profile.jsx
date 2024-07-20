@@ -4,11 +4,17 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
 import Card from '../../components/Card/Card';
+import Modal from '../../components/Modal/Modal';
+import Chat from '../../components/Chat/Chat';
 
 const Profile = () => {
     const { currentUser } = useContext(AuthContext);
     const [userPosts, setUserPosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
+    const [chats, setChats] = useState([]);
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [chatReceiver, setChatReceiver] = useState(null);
+    const [chatId, setChatId] = useState(null);
 
     useEffect(() => {
         const fetchUserPosts = async () => {
@@ -43,11 +49,26 @@ const Profile = () => {
             }
         }
 
+        const fetchUserChats = async () => {
+            if (!currentUser) return;
+            try {
+                const res = await apiRequest.get(`/chats/user/${currentUser._id}`);
+                setChats(res.data.filter(chat => chat.messages.length > 0));
+            } catch (error) {
+                console.log('Failed to fetch user chats:', error)
+            }
+        }
+
         fetchUserPosts();
         fetchSavedPosts()
+        fetchUserChats();
     }, [currentUser]);
 
-    console.log("User posts:", userPosts);
+    const handleOpenChat = async (chatId, receiver) => {
+        setChatReceiver(receiver);
+        setChatId(chatId);
+        setIsChatOpen(true);
+    };
 
     return (
         <div className='profile'>
@@ -100,8 +121,36 @@ const Profile = () => {
                 </div>
             </div>
             <div className="container">
-
+            <div className="messages">
+                <h1>Messages</h1>
+                {
+                    chats.length > 0 ? (
+                        chats.map((chat) => {
+                            const otherUser = chat.userIds.find(user => user._id !== currentUser._id);
+                            const lastMessage = chat.messages[chat.messages.length - 1];
+                            return (
+                                <div
+                                    className="message"
+                                    key={chat._id}
+                                    onClick={() => handleOpenChat(chat._id, otherUser)}
+                                >
+                                    <img src={otherUser.avatar || '/noavatar.jpg'} alt="" />
+                                    <span>{otherUser.username}</span>
+                                    <p>{lastMessage?.text}</p>
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <p>No Messages!</p>
+                    )
+                }
+                </div>
             </div>
+            {isChatOpen && chatReceiver && chatId && (
+                <Modal onClose={() => setIsChatOpen(false)}>
+                    <Chat receiver={chatReceiver} setIsChatOpen={setIsChatOpen} chatId={chatId} currentUser={currentUser} />
+                </Modal>
+            )}
         </div>
     )
 }
