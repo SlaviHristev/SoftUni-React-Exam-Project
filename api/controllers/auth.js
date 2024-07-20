@@ -23,7 +23,7 @@ export const register = async (req, res) => {
         console.log(error);
          
          if (error.name === 'ValidationError') {
-            
+
             const messages = Object.values(error.errors).map(err => err.message);
             res.status(400).json({ errors: messages });
         } else if (error.code === 11000) {

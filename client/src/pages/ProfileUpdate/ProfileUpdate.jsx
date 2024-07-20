@@ -4,17 +4,32 @@ import './profileUpdate.scss'
 import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
+import { ErrorContext } from '../../context/ErrorContext';
 
 const ProfileUpdate = () => {
     const { currentUser, updateUser } = useContext(AuthContext);
     const [avatar, setAvatar] = useState([]);
     const navigate = useNavigate();
+    const { showError } = useContext(ErrorContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const { username, email, password } = Object.fromEntries(formData);
 
+        if (username.length < 4) {
+            showError('Username must be at least 4 characters long');
+            return;
+        }
+        if (email.length < 10) {
+            showError('Email must be at least 10 characters long');
+            return;
+        }
+        if (password.length < 4) {
+            showError('Password must be at least 4 characters long');
+            return;
+        }
+        
         try {
             const res = await apiRequest.put(`/users/${currentUser._id}`,
                 {
@@ -25,8 +40,9 @@ const ProfileUpdate = () => {
                 });
             updateUser(res.data);
             navigate('/profile');
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            const errorMessages = err.response?.data?.errors || ['Registration failed'];
+            errorMessages.forEach(message => showError(message));
         }
     }
     return (
@@ -58,7 +74,7 @@ const ProfileUpdate = () => {
                     folder: "avatars",
                     maxImageFileSize: 2000000,
                 }}
-                setState={setAvatar} />
+                    setState={setAvatar} />
             </div>
         </div>
     )

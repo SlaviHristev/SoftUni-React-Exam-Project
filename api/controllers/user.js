@@ -32,8 +32,19 @@ export const updateUser = async(req,res) =>{
 
         res.status(200).json(updatedUser);
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Failed to update user' });
+        if (error.name === 'ValidationError') {
+            const messages = Object.values(error.errors).map(err => err.message);
+            res.status(400).json({ errors: messages });
+        } else if (error.code === 11000) {
+            
+            const field = Object.keys(error.keyValue)[0]; 
+            const value = error.keyValue[field]; 
+            res.status(400).json({ errors: [`${field} "${value}" already exists`] });
+        } else {
+           
+            console.error('Server error:', error);
+            res.status(500).json({ message: "Failed to create user!" });
+        }
     }
 }
 

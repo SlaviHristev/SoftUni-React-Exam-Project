@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import UploadWidget from '../../components/UploadWidget/UploadWidget'
 import './create.scss'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
+import { ErrorContext } from '../../context/ErrorContext';
 const Create = () => {
     const [images, setImages] = useState([]);
     const [value, setValue] = useState('');
     const navigate = useNavigate();
+    const { showError } = useContext(ErrorContext);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,8 +32,9 @@ const Create = () => {
                 images: images
             }});
             navigate('/catalog');
-        } catch (error) {
-            console.log(error);
+        } catch (err) {
+            const errorMessages = err.response?.data?.errors || ['Creation Failed!'];
+            errorMessages.forEach(message => showError(message));
         }
     }
 

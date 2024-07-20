@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './edit.scss';
 import ReactQuill from 'react-quill';
 import { useNavigate, useParams } from 'react-router-dom';
 import apiRequest from '../../lib/apiRequest';
 import UploadWidget from '../../components/UploadWidget/UploadWidget';
+import { ErrorContext } from '../../context/ErrorContext';
 
 const Edit = () => {
     const [value, setValue] = useState('');
@@ -25,6 +26,7 @@ const Edit = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { showError } = useContext(ErrorContext);
 
     useEffect(() => {
         const getPost = async () => {
@@ -72,6 +74,36 @@ const Edit = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (post.title.length < 4) {
+            showError('Title must be at least 4 characters long');
+            return;
+        }
+        if (post.price <= 0) {
+            showError('Price must be greater than 0');
+            return;
+        }
+        if (post.yearOfMake <= 0) {
+            showError('Year of Make must be a positive number');
+            return;
+        }
+        if (post.horsePower <= 0) {
+            showError('Engine Power must be a positive number');
+            return;
+        }
+        if (post.color.length < 3) {
+            showError('Color must be at least 3 characters long');
+            return;
+        }
+        if (post.city.length < 3) {
+            showError('City must be at least 3 characters long');
+            return;
+        }
+        if(value.length < 10){
+            showError('Description must be at least 10 characters long');
+            return;
+        }
+
         try {
             const updatedPost = {
                 ...post,
@@ -85,13 +117,12 @@ const Edit = () => {
             await apiRequest.put(`/posts/edit/${id}`, updatedPost);
             navigate(`/${id}`);
         } catch (error) {
-            console.error('Failed to update post:', error);
-            setError('Failed to update post');
+            const errorMessages = error.response?.data?.errors || ['Registration failed'];
+      errorMessages.forEach(message => showError(message));
         }
     };
 
     if (loading) return <div>Loading...</div>;
-    if (error) return <div>{error}</div>;
     if (!post) return <div>No post data</div>;
 
     return (
