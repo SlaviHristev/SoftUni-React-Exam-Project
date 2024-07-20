@@ -59,7 +59,7 @@ const CardSlider = ({ items }) => {
         <div className="cardSlider">
             <Slider {...settings}>
                 {items.map(item => (
-                    <div key={item.id}>
+                    <div key={item._id}>
                         <Card item={item} />
                     </div>
                 ))}

@@ -3,6 +3,7 @@ import './home.scss'
 import apiRequest from '../../lib/apiRequest';
 import CardSlider from '../../components/CardSlider/CardSlider';
 import Card from '../../components/Card/Card';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 const Home = () => {
 
@@ -39,6 +40,7 @@ const Home = () => {
                 </div>
             </div>
             <div className="lowerPart">
+                <SearchBar />
                 <div className="sliderContainer">
                     <CardSlider items={recentCars} />
                 </div>
