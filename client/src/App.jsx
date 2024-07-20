@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import  {Layout, RequireAuth } from './pages/Layout/Layout'
+import { Layout, RequireAuth } from './pages/Layout/Layout'
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
@@ -11,6 +11,8 @@ import SinglePage from './pages/SinglePage/SinglePage'
 import Edit from './pages/Edit/Edit'
 import Profile from './pages/Profile/Profile'
 import ProfileUpdate from './pages/ProfileUpdate/ProfileUpdate'
+import { ErrorProvider } from './context/ErrorContext'
+import ErrorPopUp from './components/ErrorPopUp/ErrorPopUp'
 
 
 function App() {
@@ -59,17 +61,17 @@ function App() {
           path: '/create',
           element: <Create />
         },
-         {
+        {
           path: '/edit/:id',
-          element: <Edit/>
+          element: <Edit />
         },
         {
-          path:'/profile',
-          element:<Profile/>
+          path: '/profile',
+          element: <Profile />
         },
         {
-          path:'/profile/update',
-          element:<ProfileUpdate/>
+          path: '/profile/update',
+          element: <ProfileUpdate />
         },
 
       ]
@@ -77,7 +79,10 @@ function App() {
   ])
   return (
     <>
-      <RouterProvider router={router} />
+      <ErrorProvider>
+        <ErrorPopUp />
+        <RouterProvider router={router} />
+      </ErrorProvider>
     </>
   )
 }
