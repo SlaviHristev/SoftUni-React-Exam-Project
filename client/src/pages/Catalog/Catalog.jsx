@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './catalog.scss'
 import apiRequest from '../../lib/apiRequest';
 import Card from '../../components/Card/Card';
+import SearchBar from '../../components/SearchBar/SearchBar';
 
 const Catalog = () => {
 
@@ -23,6 +24,7 @@ const Catalog = () => {
     <div className='catalog'>
       <div className="container">
         <h2>Choose a car of your liking!</h2>
+        <SearchBar/>
         <div className="wrapper">
           {posts.map(post => (
             <Card key={post._id} item={post} />
