@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import apiRequest from '../../lib/apiRequest';
 import UploadWidget from '../../components/UploadWidget/UploadWidget';
 import useError from '../../hooks/useError';
+import Spinner from '../../components/Spinner/Spinner';
 
 const Edit = () => {
     const [value, setValue] = useState('');
@@ -116,12 +117,12 @@ const Edit = () => {
             await apiRequest.put(`/posts/edit/${id}`, updatedPost);
             navigate(`/${id}`);
         } catch (error) {
-            const errorMessages = error.response?.data?.errors || ['Registration failed'];
+            const errorMessages = error.response?.data?.errors || ['Edit failed'];
       errorMessages.forEach(message => showError(message));
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Spinner/>;
     if (!post) return <div>No post data</div>;
 
     return (

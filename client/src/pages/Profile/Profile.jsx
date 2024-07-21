@@ -7,11 +7,13 @@ import Card from '../../components/Card/Card';
 import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
 import useError from '../../hooks/useError';
+import Spinner from '../../components/Spinner/Spinner';
 
 const Profile = () => {
     const { currentUser } = useContext(AuthContext);
     const [userPosts, setUserPosts] = useState([]);
     const [savedPosts, setSavedPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [chats, setChats] = useState([]);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [chatReceiver, setChatReceiver] = useState(null);
@@ -30,9 +32,11 @@ const Profile = () => {
                 const res = await apiRequest.get(`/posts/user/${currentUser._id}`);
                 console.log("API response:", res.data);
                 setUserPosts(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error('Failed to fetch user posts:', error);
-                showError('Failed to fetch user posts')
+                showError('Failed to fetch user posts');
+                setLoading(false);
             }
         };
 
@@ -47,9 +51,11 @@ const Profile = () => {
                 const res = await apiRequest.get(`/users/${currentUser._id}/saved`)
                 console.log("API response:", res.data);
                 setSavedPosts(res.data);
+                setLoading(false);
             } catch (error) {
                 console.error('Failed to fetch saved posts:', error);
                 showError('Failed to fetch saved posts')
+                setLoading(false);
             }
         }
 
@@ -58,9 +64,11 @@ const Profile = () => {
             try {
                 const res = await apiRequest.get(`/chats/user/${currentUser._id}`);
                 setChats(res.data.filter(chat => chat.messages.length > 0));
+                setLoading(false);
             } catch (error) {
                 console.log('Failed to fetch user chats:', error)
                 showError('Failed to fetch user chats')
+                setLoading(false);
             }
         }
 
@@ -74,6 +82,8 @@ const Profile = () => {
         setChatId(chatId);
         setIsChatOpen(true);
     };
+
+    if(loading) return <Spinner/>
 
     return (
         <div className='profile'>

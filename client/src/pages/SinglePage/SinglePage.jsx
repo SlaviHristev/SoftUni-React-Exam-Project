@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
 import useError from '../../hooks/useError';
+import Spinner from '../../components/Spinner/Spinner';
 
 const SinglePage = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -88,7 +89,7 @@ const SinglePage = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner />;
   if (!post) return <div>No post data</div>;
 
   const isOwner = currentUser?._id === post.ownerId._id;

@@ -41,7 +41,7 @@ const ProfileUpdate = () => {
             updateUser(res.data);
             navigate('/profile');
         } catch (err) {
-            const errorMessages = err.response?.data?.errors || ['Registration failed'];
+            const errorMessages = err.response?.data?.errors || ['Profile update failed'];
             errorMessages.forEach(message => showError(message));
         }
     }

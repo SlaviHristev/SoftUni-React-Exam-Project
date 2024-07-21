@@ -5,11 +5,13 @@ import Card from '../../components/Card/Card';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { useLocation } from 'react-router-dom';
 import useError from '../../hooks/useError';
+import Spinner from '../../components/Spinner/Spinner';
 
 const Catalog = () => {
   const [posts, setPosts] = useState([]);
   const location = useLocation();
   const { showError } = useError();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -32,17 +34,23 @@ const Catalog = () => {
               maxPrice
             }
           });
+          setLoading(false);
         } else {
           fetchedPosts = await apiRequest.get('/posts');
         }
         setPosts(fetchedPosts.data);
+        setLoading(false);
       } catch (error) {
         console.error('Failed to fetch posts:', error);
-        showError('Failed to fetch posts')
+        showError('Failed to fetch posts');
+        setLoading(false);
       }
     };
     fetchPosts();
   }, [location.search]);
+
+
+if(loading) return <Spinner />
 
   return (
     <div className='catalog'>
