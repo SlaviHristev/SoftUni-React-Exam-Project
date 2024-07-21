@@ -68,12 +68,12 @@ const Card = ({ item }) => {
 
     return (
         <div className='card'>
-            <Link to={`/${item._id}`} className='imageContainer'>
+            <Link to={`/catalog/${item._id}`} className='imageContainer'>
                 <img src={item.images[0]} />
             </Link>
             <div className="textContainer">
                 <h2 className='title'>
-                    <Link to={`/${item._id}`}>{item.title}</Link>
+                    <Link to={`/catalog/${item._id}`}>{item.title}</Link>
                 </h2>
                 <p className='city'>
                     <img src="/pin.png" alt="" />

@@ -13,6 +13,7 @@ import Profile from './pages/Profile/Profile'
 import ProfileUpdate from './pages/ProfileUpdate/ProfileUpdate'
 import { ErrorProvider } from './context/ErrorContext'
 import ErrorPopUp from './components/ErrorPopUp/ErrorPopUp'
+import NotFound from './pages/NotFound/NotFound'
 
 
 function App() {
@@ -48,9 +49,13 @@ function App() {
           element: <Contact />
         },
         {
-          path: '/:id',
+          path: '/catalog/:id',
           element: <SinglePage />
         },
+        {
+          path:'*',
+          element:<NotFound/>
+        }
       ]
     },
     {
@@ -73,8 +78,16 @@ function App() {
           path: '/profile/update',
           element: <ProfileUpdate />
         },
+        {
+          path:'*',
+          element:<NotFound/>
+        }
 
       ]
+    },
+    {
+      path:'*',
+      element:<NotFound/>
     }
   ])
   return (
