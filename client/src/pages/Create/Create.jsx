@@ -6,6 +6,10 @@ import 'react-quill/dist/quill.snow.css';
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
 import useError from '../../hooks/useError';
+import {motion} from 'framer-motion';
+
+ 
+
 const Create = () => {
     const [images, setImages] = useState([]);
     const [value, setValue] = useState('');
@@ -38,9 +42,24 @@ const Create = () => {
         }
     }
 
+    const variants = {
+        initial: {
+            y: 0,
+            opacity: 0
+        },
+        animate: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 1,
+                staggerChildren: 0.1,
+            },
+        }
+    };
+
     return (
         <div className='create'>
-            <div className="formContainer">
+            <motion.div className="formContainer" variants={variants} initial='initial' whileInView='animate'>
                 <h1>Add New Car</h1>
                 <div className="wrapper">
                     <form onSubmit={handleSubmit}>
@@ -101,8 +120,8 @@ const Create = () => {
                         <button className='send'>Add</button>
                     </form>
                 </div>
-            </div>
-            <div className="sideContainer">
+            </motion.div>
+            <motion.div className="sideContainer" variants={variants} initial='initial' whileInView='animate'>
                 {images.map((image, index) => (
                     <img src={image} key={index} alt="" />
                 ))}
@@ -115,7 +134,7 @@ const Create = () => {
                     }}
                     setState={setImages}
                 />
-            </div>
+            </motion.div>
         </div>
     )
 }

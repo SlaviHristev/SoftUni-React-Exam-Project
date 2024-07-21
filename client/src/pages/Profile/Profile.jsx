@@ -8,6 +8,7 @@ import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
+import { motion } from 'framer-motion';
 
 const Profile = () => {
     const { currentUser } = useContext(AuthContext);
@@ -83,11 +84,26 @@ const Profile = () => {
         setIsChatOpen(true);
     };
 
-    if(loading) return <Spinner/>
+    if (loading) return <Spinner />
+
+    const variants = {
+        initial: {
+            x: -500,
+            opacity: 0
+        },
+        animate: {
+            x: 0,
+            opacity: 1,
+            transition: {
+                duration: 1,
+                staggerChildren: 0.1,
+            },
+        }
+    };
 
     return (
         <div className='profile'>
-            <div className="details">
+            <motion.div className="details" variants={variants} initial='initial' whileInView='animate'>
                 <div className="wrapper">
                     <div className="title">
                         <h1>User Information</h1>
@@ -134,33 +150,33 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="container">
-            <div className="messages">
-                <h1>Messages</h1>
-                {
-                    chats.length > 0 ? (
-                        chats.map((chat) => {
-                            const otherUser = chat.userIds.find(user => user._id !== currentUser._id);
-                            const lastMessage = chat.messages[chat.messages.length - 1];
-                            return (
-                                <div
-                                    className="message"
-                                    key={chat._id}
-                                    onClick={() => handleOpenChat(chat._id, otherUser)}
-                                >
-                                    <img src={otherUser.avatar || '/noavatar.jpg'} alt="" />
-                                    <span>{otherUser.username}</span>
-                                    <p>{lastMessage?.text}</p>
-                                </div>
-                            );
-                        })
-                    ) : (
-                        <p>No Messages!</p>
-                    )
-                }
+            </motion.div>
+            <motion.div className="container" variants={variants} initial={{x:500}} whileInView='animate'>
+                <div className="messages">
+                    <h1>Messages</h1>
+                    {
+                        chats.length > 0 ? (
+                            chats.map((chat) => {
+                                const otherUser = chat.userIds.find(user => user._id !== currentUser._id);
+                                const lastMessage = chat.messages[chat.messages.length - 1];
+                                return (
+                                    <div
+                                        className="message"
+                                        key={chat._id}
+                                        onClick={() => handleOpenChat(chat._id, otherUser)}
+                                    >
+                                        <img src={otherUser.avatar || '/noavatar.jpg'} alt="" />
+                                        <span>{otherUser.username}</span>
+                                        <p>{lastMessage?.text}</p>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <p>No Messages!</p>
+                        )
+                    }
                 </div>
-            </div>
+            </motion.div>
             {isChatOpen && chatReceiver && chatId && (
                 <Modal onClose={() => setIsChatOpen(false)}>
                     <Chat receiver={chatReceiver} setIsChatOpen={setIsChatOpen} chatId={chatId} currentUser={currentUser} />

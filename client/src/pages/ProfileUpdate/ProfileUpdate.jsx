@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
 import useError from '../../hooks/useError';
+import {motion} from 'framer-motion';
 
 const ProfileUpdate = () => {
     const { currentUser, updateUser } = useContext(AuthContext);
@@ -45,9 +46,24 @@ const ProfileUpdate = () => {
             errorMessages.forEach(message => showError(message));
         }
     }
+
+    const variants = {
+        initial: {
+            y: 500,
+            opacity: 0
+        },
+        animate: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 1,
+                staggerChildren: 0.1,
+            },
+        }
+    };
     return (
-        <div className='profileUpdate'>
-            <div className="formContainer">
+        <div className='profileUpdate' >
+            <motion.div className="formContainer" variants={variants} initial='initial' whileInView='animate'>
                 <form onSubmit={handleSubmit}>
                     <h1>Update Profile</h1>
                     <div className="item">
@@ -64,8 +80,8 @@ const ProfileUpdate = () => {
                     </div>
                     <button>Update</button>
                 </form>
-            </div>
-            <div className="sideContainer">
+            </motion.div>
+            <motion.div className="sideContainer" variants={variants} initial={{y:-400}} whileInView='animate'>
                 <img src={avatar[0] || currentUser.avatar || '/noavatar.jpg'} alt="" className='avatar' />
                 <UploadWidget uwConfig={{
                     multiple: false,
@@ -75,7 +91,7 @@ const ProfileUpdate = () => {
                     maxImageFileSize: 2000000,
                 }}
                     setState={setAvatar} />
-            </div>
+            </motion.div>
         </div>
     )
 }

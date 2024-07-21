@@ -4,6 +4,8 @@ import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
 import useError from '../../hooks/useError';
 import { useContext } from 'react';
+import { motion } from 'framer-motion';
+
 
 
 const Login = () => {
@@ -34,9 +36,38 @@ const Login = () => {
     }
   }
 
+  const variant1 = {
+    initial: {
+      y: 500,
+      opacity: 0
+    },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+        staggerChildren: 0.1,
+      },
+    }
+  };
+  const variant2 = {
+    initial: {
+      y: -500,
+      opacity: 0
+    },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+        staggerChildren: 0.1,
+      },
+    }
+  };
+
   return (
-    <div className='login'>
-      <div className="formContainer">
+    <motion.div className='login'>
+      <motion.div  className="formContainer" variants={variant1} initial='initial' animate='animate' >
         <form onSubmit={handleSubmit}>
           <h1>Welcome back</h1>
           <input type="text" name='username' placeholder='Usename' required />
@@ -44,11 +75,11 @@ const Login = () => {
           <button>Login</button>
           <Link to={'/register'}>Don`t have an account?</Link>
         </form>
-      </div>
-      <div className="imgContainer">
-        <img src="/background3.png" alt="" />
-      </div>
-    </div>
+      </motion.div>
+      <motion.div className="imgContainer">
+        <motion.img src="/background3.png" alt=""  variants={variant2} initial='initial' animate='animate'/>
+      </motion.div>
+    </motion.div>
   )
 }
 

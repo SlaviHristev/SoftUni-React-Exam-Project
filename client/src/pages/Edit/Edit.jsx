@@ -6,6 +6,7 @@ import apiRequest from '../../lib/apiRequest';
 import UploadWidget from '../../components/UploadWidget/UploadWidget';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
+import {motion} from 'framer-motion';
 
 const Edit = () => {
     const [value, setValue] = useState('');
@@ -125,9 +126,24 @@ const Edit = () => {
     if (loading) return <Spinner/>;
     if (!post) return <div>No post data</div>;
 
+    const variants = {
+        initial: {
+            y: 0,
+            opacity: 0
+        },
+        animate: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                duration: 1,
+                staggerChildren: 0.1,
+            },
+        }
+    };
+
     return (
         <div className='edit'>
-            <div className="formContainer">
+            <motion.div className="formContainer" variants={variants} initial='initial' whileInView='animate'>
                 <h1>Edit your Car Info</h1>
                 <div className="wrapper">
                     <form onSubmit={handleSubmit}>
@@ -189,8 +205,8 @@ const Edit = () => {
                         <button className='send' type='submit'>Update</button>
                     </form>
                 </div>
-            </div>
-            <div className="sideContainer">
+            </motion.div>
+            <motion.div className="sideContainer" variants={variants} initial='initial' whileInView='animate'>
                 <div className="images">
                     <h2>Images</h2>
                     {images.length > 0 ? (
@@ -217,7 +233,7 @@ const Edit = () => {
                         setState={handleUploadWidgetChange}
                     />
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import CardSlider from '../../components/CardSlider/CardSlider';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
+import {motion} from 'framer-motion';
 
 const Home = () => {
 
@@ -30,9 +31,39 @@ const Home = () => {
 
     if(loading) return <Spinner />
 
+    const variant1 = {
+        initial: {
+          y: -500,
+          opacity: 0
+        },
+        animate: {
+          y: 0,
+          opacity: 1,
+          transition: {
+            duration: 1,
+            staggerChildren: 0.3,
+    
+          },
+        }
+      };
+      const variant2 = {
+        initial: {
+          x: -500,
+          opacity: 0,
+        },
+        animate: {
+          x: 0,
+          opacity: 1,
+          transition: {
+            duration: 1,
+            staggerChildren: 0.1,
+          },
+        },
+      };
+
     return (
         <div className='home'>
-            <div className="upperPart">
+            <motion.div className="upperPart" variants={variant1} initial='initial' animate='animate'>
                 <div className="textContainer">
 
                     <div className="wrapper">
@@ -44,13 +75,15 @@ const Home = () => {
                 <div className="imgContainer">
                     <img src="/background.png" alt="" />
                 </div>
-            </div>
-            <div className="lowerPart">
+            </motion.div>
+            <motion.div className="lowerPart" >
+                <motion.div variants={variant2} initial={{x:500}} animate='animate'>
                 <SearchBar />
-                <div className="sliderContainer">
+                </motion.div>
+                <motion.div className="sliderContainer" variants={variant2} initial='initial' animate='animate'>
                     <CardSlider items={recentCars} />
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
 
         </div>
     )

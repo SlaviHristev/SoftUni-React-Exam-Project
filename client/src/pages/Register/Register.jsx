@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import './register.scss'
 import apiRequest from '../../lib/apiRequest';
 import useError from '../../hooks/useError';
+import {motion} from 'framer-motion';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -26,9 +27,39 @@ const Register = () => {
     }
   }
 
+  const variant1 = {
+    initial: {
+      y: 500,
+      opacity: 0
+    },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+        staggerChildren: 0.1,
+      },
+    }
+  };
+  const variant2 = {
+    initial: {
+      y: -500,
+      opacity: 0
+    },
+    animate: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+        staggerChildren: 0.1,
+      },
+    }
+  };
+
+
   return (
-    <div className='register'>
-      <div className="formContainer">
+    <motion.div className='register'>
+      <motion.div className="formContainer" variants={variant2} initial='initial' animate='animate'>
         <form onSubmit={handleSubmit}>
           <h1>Create an Account</h1>
           <input type="text" name='username' placeholder='Username' />
@@ -37,11 +68,11 @@ const Register = () => {
           <button>Register</button>
           <Link to='/login'>Already have an account?</Link>
         </form>
-      </div>
-      <div className="imgContainer">
-        <img src="/background2.png" alt="" />
-      </div>
-    </div>
+      </motion.div>
+      <motion.div className="imgContainer">
+        <motion.img src="/background2.png" alt=""  variants={variant1} initial='initial' animate='animate'/>
+      </motion.div>
+    </motion.div>
   )
 }
 

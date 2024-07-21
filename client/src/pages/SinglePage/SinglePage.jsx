@@ -9,6 +9,7 @@ import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
+import {motion} from 'framer-motion';
 
 const SinglePage = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -92,11 +93,26 @@ const SinglePage = () => {
   if (loading) return <Spinner />;
   if (!post) return <div>No post data</div>;
 
+  const variants = {
+    initial: {
+        y: 0,
+        opacity: 0
+    },
+    animate: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            duration: 1,
+            staggerChildren: 0.1,
+        },
+    }
+};
+
   const isOwner = currentUser?._id === post.ownerId._id;
 
   return (
     <div className='singlePage'>
-      <div className="details">
+      <motion.div className="details" variants={variants} initial='initial' whileInView='animate'>
         <div className="wrapper">
           <Slider images={post.images} />
           <div className="info">
@@ -122,8 +138,8 @@ const SinglePage = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className="features">
+      </motion.div>
+      <motion.div className="features" variants={variants} initial='initial' whileInView='animate'>
         <div className="wrapper">
           <p className="title">General</p>
           <div className="listVertical">
@@ -198,7 +214,7 @@ const SinglePage = () => {
             }
           </div>
         </div>
-      </div>
+      </motion.div>
       {isChatOpen && (
         <Modal onClose={() => setIsChatOpen(false)}>
           <Chat receiver={chatReceiver} setIsChatOpen={setIsChatOpen} chatId={chatId} currentUser={currentUser} />
