@@ -1,14 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom'
 import './login.scss'
-import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
-import { ErrorContext } from '../../context/ErrorContext';
+import useError from '../../hooks/useError';
+import { useContext } from 'react';
+
 
 const Login = () => {
 
   const { updateUser } = useContext(AuthContext);
-  const { showError } = useContext(ErrorContext);
+  const { showError } = useError();
 
   const navigate = useNavigate();
 

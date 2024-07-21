@@ -1,12 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
 import './register.scss'
 import apiRequest from '../../lib/apiRequest';
-import { useContext } from 'react';
-import { ErrorContext } from '../../context/ErrorContext';
+import useError from '../../hooks/useError';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { showError } = useContext(ErrorContext);
+  const { showError } = useError();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

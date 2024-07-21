@@ -1,16 +1,16 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import UploadWidget from '../../components/UploadWidget/UploadWidget'
 import './create.scss'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
-import { ErrorContext } from '../../context/ErrorContext';
+import useError from '../../hooks/useError';
 const Create = () => {
     const [images, setImages] = useState([]);
     const [value, setValue] = useState('');
     const navigate = useNavigate();
-    const { showError } = useContext(ErrorContext);
+    const { showError } = useError();
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import './home.scss'
 import apiRequest from '../../lib/apiRequest';
 import CardSlider from '../../components/CardSlider/CardSlider';
-import Card from '../../components/Card/Card';
 import SearchBar from '../../components/SearchBar/SearchBar';
+import useError from '../../hooks/useError';
 
 const Home = () => {
 
     const [recentCars, setRecentCars] = useState([]);
-
+    const { showError } = useError();
     useEffect(() => {
         const recentFetchedCars = async () => {
             try {
@@ -16,6 +16,7 @@ const Home = () => {
                 setRecentCars(response.data);
             } catch (error) {
                 console.error('Failed to fetch recent cars:', error);
+                showError('Failed to fetch recent cars')
 
             }
 

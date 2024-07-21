@@ -46,7 +46,8 @@ const carSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: [true, 'Description is required!']
+        required: [true, 'Description is required!'],
+        minlength: [10, 'Description should be at least 10 symbols long!']
     },
     images: {
         type: [String],

@@ -4,10 +4,12 @@ import apiRequest from '../../lib/apiRequest';
 import Card from '../../components/Card/Card';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import { useLocation } from 'react-router-dom';
+import useError from '../../hooks/useError';
 
 const Catalog = () => {
   const [posts, setPosts] = useState([]);
   const location = useLocation();
+  const { showError } = useError();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -36,6 +38,7 @@ const Catalog = () => {
         setPosts(fetchedPosts.data);
       } catch (error) {
         console.error('Failed to fetch posts:', error);
+        showError('Failed to fetch posts')
       }
     };
     fetchPosts();

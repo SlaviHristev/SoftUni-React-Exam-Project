@@ -5,6 +5,7 @@ import { AuthContext } from '../../context/AuthContext'
 import apiRequest from '../../lib/apiRequest'
 import Chat from '../Chat/Chat'
 import Modal from '../Modal/Modal'
+import useError from '../../hooks/useError'
 
 
 const Card = ({ item }) => {
@@ -13,6 +14,7 @@ const Card = ({ item }) => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [chatReceiver, setChatReceiver] = useState(null);
     const [chatId, setChatId] = useState(null);
+    const { showError } = useError();
 
     const isOwner = currentUser?._id === item.ownerId;
 
@@ -41,6 +43,7 @@ const Card = ({ item }) => {
             }
         } catch (error) {
             console.log('Failed to toggle save post:', error);
+            showError('Failed to toggle save post');
         }
     };
 
@@ -58,6 +61,7 @@ const Card = ({ item }) => {
           setIsChatOpen(true);
         } catch (error) {
           console.log('Failed to fetch chat receiver:', error);
+          showError('Failed to fetch chat receiver')
         }
       };
     

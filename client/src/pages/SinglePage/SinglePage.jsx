@@ -7,6 +7,7 @@ import DOMPurify from 'dompurify'
 import { AuthContext } from '../../context/AuthContext';
 import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
+import useError from '../../hooks/useError';
 
 const SinglePage = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -14,11 +15,11 @@ const SinglePage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatReceiver, setChatReceiver] = useState(null);
   const [chatId, setChatId] = useState(null);
   const navigate = useNavigate();
+  const { showError } = useError();
 
   useEffect(() => {
     const getPost = async () => {
@@ -29,7 +30,7 @@ const SinglePage = () => {
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch post:', error);
-        setError('Failed to fetch post');
+        showError('Failed to fetch post')
         setLoading(false);
       }
     };
@@ -56,6 +57,7 @@ const SinglePage = () => {
       setIsSaved(!isSaved);
     } catch (error) {
       console.log('Failed to toggle save post:', error);
+      showError('Failed to toggle save post')
     }
   };
 
@@ -65,7 +67,7 @@ const SinglePage = () => {
       navigate('/catalog');
     } catch (error) {
       console.error('Failed to delete post:', error);
-      setError('Failed to delete post');
+      showError('Failed to delete post')
     }
   };
   const handleOpenChat = async () => {
@@ -82,11 +84,11 @@ const SinglePage = () => {
       setIsChatOpen(true);
     } catch (error) {
       console.log('Failed to fetch chat receiver:', error);
+      showError('Failed to fetch chat receiver')
     }
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
   if (!post) return <div>No post data</div>;
 
   const isOwner = currentUser?._id === post.ownerId._id;

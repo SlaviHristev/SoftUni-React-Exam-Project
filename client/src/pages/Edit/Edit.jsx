@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './edit.scss';
 import ReactQuill from 'react-quill';
 import { useNavigate, useParams } from 'react-router-dom';
 import apiRequest from '../../lib/apiRequest';
 import UploadWidget from '../../components/UploadWidget/UploadWidget';
-import { ErrorContext } from '../../context/ErrorContext';
+import useError from '../../hooks/useError';
 
 const Edit = () => {
     const [value, setValue] = useState('');
@@ -24,9 +24,8 @@ const Edit = () => {
         images: []
     });
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const { showError } = useContext(ErrorContext);
+    const { showError } = useError();
 
     useEffect(() => {
         const getPost = async () => {
@@ -39,7 +38,7 @@ const Edit = () => {
                 setLoading(false);
             } catch (error) {
                 console.error('Failed to fetch post:', error);
-                setError('Failed to fetch post');
+                showError('Failed to fetch post');
                 setLoading(false);
             }
         };

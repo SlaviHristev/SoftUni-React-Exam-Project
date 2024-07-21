@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import './chat.scss'
 import apiRequest from "../../lib/apiRequest";
+import useError from "../../hooks/useError";
 
 const Chat = ({
     receiver,
@@ -11,6 +12,7 @@ const Chat = ({
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const { showError } = useError();
 
     useEffect(() => {
 
@@ -20,6 +22,7 @@ const Chat = ({
                 setMessages(res.data.messages);
             } catch (error) {
                 console.log('Failed to fetch chat history:', error);
+                showError('Failed to fetch chat history');
             }
         }
         fetchChatHistory();
@@ -41,6 +44,7 @@ const Chat = ({
 
         } catch (error) {
             console.log('Failed to send messages:', error);
+            showError('Failed to send message')
         }
     }
     return (

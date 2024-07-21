@@ -6,6 +6,7 @@ import apiRequest from '../../lib/apiRequest';
 import Card from '../../components/Card/Card';
 import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
+import useError from '../../hooks/useError';
 
 const Profile = () => {
     const { currentUser } = useContext(AuthContext);
@@ -15,6 +16,7 @@ const Profile = () => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [chatReceiver, setChatReceiver] = useState(null);
     const [chatId, setChatId] = useState(null);
+    const { showError } = useError();
 
     useEffect(() => {
         const fetchUserPosts = async () => {
@@ -30,6 +32,7 @@ const Profile = () => {
                 setUserPosts(res.data);
             } catch (error) {
                 console.error('Failed to fetch user posts:', error);
+                showError('Failed to fetch user posts')
             }
         };
 
@@ -46,6 +49,7 @@ const Profile = () => {
                 setSavedPosts(res.data);
             } catch (error) {
                 console.error('Failed to fetch saved posts:', error);
+                showError('Failed to fetch saved posts')
             }
         }
 
@@ -56,6 +60,7 @@ const Profile = () => {
                 setChats(res.data.filter(chat => chat.messages.length > 0));
             } catch (error) {
                 console.log('Failed to fetch user chats:', error)
+                showError('Failed to fetch user chats')
             }
         }
 

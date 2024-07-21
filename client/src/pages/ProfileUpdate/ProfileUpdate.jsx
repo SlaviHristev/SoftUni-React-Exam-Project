@@ -4,13 +4,13 @@ import './profileUpdate.scss'
 import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../lib/apiRequest';
 import { useNavigate } from 'react-router-dom';
-import { ErrorContext } from '../../context/ErrorContext';
+import useError from '../../hooks/useError';
 
 const ProfileUpdate = () => {
     const { currentUser, updateUser } = useContext(AuthContext);
     const [avatar, setAvatar] = useState([]);
     const navigate = useNavigate();
-    const { showError } = useContext(ErrorContext);
+    const { showError } = useError();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
