@@ -14,6 +14,7 @@ import ProfileUpdate from './pages/ProfileUpdate/ProfileUpdate'
 import { ErrorProvider } from './context/ErrorContext'
 import ErrorPopUp from './components/ErrorPopUp/ErrorPopUp'
 import NotFound from './pages/NotFound/NotFound'
+import UserProfile from './pages/UserProfile/UserProfile'
 
 
 function App() {
@@ -51,6 +52,10 @@ function App() {
         {
           path: '/catalog/:id',
           element: <SinglePage />
+        },
+        {
+          path: '/profiles/:id',
+          element: <UserProfile />
         },
         {
           path:'*',

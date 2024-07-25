@@ -9,7 +9,7 @@ import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
-import {motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const SinglePage = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -95,18 +95,18 @@ const SinglePage = () => {
 
   const variants = {
     initial: {
-        y: 0,
-        opacity: 0
+      y: 0,
+      opacity: 0
     },
     animate: {
-        y: 0,
-        opacity: 1,
-        transition: {
-            duration: 1,
-            staggerChildren: 0.1,
-        },
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+        staggerChildren: 0.1,
+      },
     }
-};
+  };
 
   const isOwner = currentUser?._id === post.ownerId._id;
 
@@ -128,10 +128,12 @@ const SinglePage = () => {
                   <p>Price:</p>
                   $ {post.price}</div>
               </div>
-              <div className="user">
-                <img src={post.ownerId.avatar || '/noavatar.jpg'} alt="" />
-                <span>{post.ownerId.username}</span>
-              </div>
+              <Link to={`/profiles/${post.ownerId._id}`} >
+                <div className="user">
+                  <img src={post.ownerId.avatar || '/noavatar.jpg'} alt="" />
+                  <span>{post.ownerId.username}</span>
+                </div>
+              </Link>
             </div>
             <div className="bottom" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.description) }}>
               { }
@@ -204,7 +206,7 @@ const SinglePage = () => {
             {!isOwner && currentUser &&
               <>
                 <button onClick={handleOpenChat}>
-                  <img src="/chat.png" alt=""  />
+                  <img src="/chat.png" alt="" />
                   Send a Message
                 </button>
                 <button onClick={handleSavePost} style={{ backgroundColor: isSaved ? "orange" : "inherit" }}>
