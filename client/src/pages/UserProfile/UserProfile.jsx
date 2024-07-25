@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './userProfile.scss'
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext';
@@ -8,6 +8,7 @@ import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
 import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
+import {motion} from 'framer-motion';
 
 const UserProfile = () => {
     const { id } = useParams();
@@ -59,11 +60,40 @@ const UserProfile = () => {
             showError('Failed to fetch chat receiver')
         }
     };
+    const variant1 = {
+        initial: {
+          y: -500,
+          opacity: 0
+        },
+        animate: {
+          y: 0,
+          opacity: 1,
+          transition: {
+            duration: 1,
+            staggerChildren: 0.3,
+    
+          },
+        }
+      };
+      const variant2 = {
+        initial: {
+          y: 400,
+          opacity: 0,
+        },
+        animate: {
+          y: 0,
+          opacity: 1,
+          transition: {
+            duration: 1,
+            staggerChildren: 0.1,
+          },
+        },
+      };
 
     if (loading) return <Spinner />;
     return (
         <div className='userProfile'>
-            <div className="userInfo">
+            <motion.div className="userInfo" variants={variant1} initial='initial' animate='animate'>
                 <img src={profile.avatar || '/noavatar.jpg'} alt="" />
                 <h2>{profile.username}</h2>
                 <p>{profile.email}</p>
@@ -75,8 +105,8 @@ const UserProfile = () => {
                         </button>
                     )
                 }
-            </div>
-            <div className="profilePosts">
+            </motion.div>
+            <motion.div className="profilePosts"variants={variant2} initial='initial' animate='animate'>
                 <h3>Posts</h3>
                 {
                     posts.length > 0 ? (
@@ -88,7 +118,7 @@ const UserProfile = () => {
                     )
                 }
 
-            </div>
+            </motion.div>
             {isChatOpen && (
                 <Modal onClose={() => setIsChatOpen(false)}>
                     <Chat receiver={chatReceiver} setIsChatOpen={setIsChatOpen} chatId={chatId} currentUser={currentUser} />
