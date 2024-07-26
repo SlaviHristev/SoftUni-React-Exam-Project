@@ -64,6 +64,9 @@ const SinglePage = () => {
   };
 
   const deletePost = async () => {
+    const confirmDelete = window.confirm('Are you sure you want to delete this post?');
+
+    if (!confirmDelete) return;
     try {
       await apiRequest.delete(`/posts/${id}`);
       navigate('/catalog');

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import './edit.scss';
 import ReactQuill from 'react-quill';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,11 +7,13 @@ import UploadWidget from '../../components/UploadWidget/UploadWidget';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
 import {motion} from 'framer-motion';
+import { AuthContext } from '../../context/AuthContext';
 
 const Edit = () => {
     const [value, setValue] = useState('');
     const { id } = useParams();
     const [images, setImages] = useState([]);
+    const {currentUser} = useContext(AuthContext);
     const [post, setPost] = useState({
         title: '',
         price: 0,
@@ -47,6 +49,9 @@ const Edit = () => {
 
         getPost();
     }, [id]);
+    if(post.ownerId?._id !== currentUser?._id){
+        navigate('/');
+    }
 
     const handleDeleteImage = (imageUrl) => {
         setImages(images.filter(image => image !== imageUrl));
@@ -116,7 +121,7 @@ const Edit = () => {
             console.log('Updated Post Data:', updatedPost);
 
             await apiRequest.put(`/posts/edit/${id}`, updatedPost);
-            navigate(`/${id}`);
+            navigate(`/catalog/${id}`);
         } catch (error) {
             const errorMessages = error.response?.data?.errors || ['Edit failed'];
       errorMessages.forEach(message => showError(message));

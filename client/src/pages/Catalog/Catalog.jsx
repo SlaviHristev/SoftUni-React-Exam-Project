@@ -93,8 +93,8 @@ const Catalog = () => {
         <motion.div className="wrapper">
           {posts.length > 0 ? (
             posts.map(post => (
-              <motion.div variants={variant1} initial='initial' animate='animate'>
-                <Card key={post._id} item={post} />
+              <motion.div variants={variant1} initial='initial' animate='animate' key={post._id}>
+                <Card  item={post} />
               </motion.div>
             ))
           ) : (
