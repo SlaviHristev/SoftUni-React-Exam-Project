@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom'
 import './card.scss'
-import { useContext, useEffect, useState } from 'react'
+import { useContext} from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import apiRequest from '../../lib/apiRequest'
 import Chat from '../Chat/Chat'
 import Modal from '../Modal/Modal'
-import useError from '../../hooks/useError'
 import useSavePost from '../../hooks/useSavePost'
 import useOpenChat from '../../hooks/useOpenChat'
 

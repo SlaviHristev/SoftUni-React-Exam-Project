@@ -8,6 +8,7 @@ import postRoute from './routes/post.js';
 import userRoute from './routes/user.js';
 import chatsRoute from './routes/chat.js';
 import messagesRoute from './routes/message.js';
+import notificationRoute from './routes/notification.js';
 
 
 
@@ -25,6 +26,7 @@ app.use('/api/posts', postRoute);
 app.use('/api/users', userRoute);
 app.use('/api/chats', chatsRoute);
 app.use('/api/messages', messagesRoute);
+app.use('/api/notifications', notificationRoute);
 
 app.listen(8800, () => {
     console.log('Server is running on port 8880!');
