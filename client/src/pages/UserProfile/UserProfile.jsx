@@ -9,6 +9,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import Modal from '../../components/Modal/Modal';
 import Chat from '../../components/Chat/Chat';
 import {motion} from 'framer-motion';
+import useOpenChat from '../../hooks/useOpenChat';
 
 const UserProfile = () => {
     const { id } = useParams();
@@ -16,11 +17,8 @@ const UserProfile = () => {
     const [profile, SetProfile] = useState(null);
     const [posts, SetPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [isChatOpen, setIsChatOpen] = useState(false);
-    const [chatReceiver, setChatReceiver] = useState(null);
-    const [chatId, setChatId] = useState(null);
-
     const { showError } = useError();
+    const { isChatOpen, chatReceiver, chatId, openChat, setIsChatOpen } = useOpenChat(currentUser);
 
     useEffect(() => {
 
@@ -43,23 +41,7 @@ const UserProfile = () => {
 
     }, [id]);
 
-    const handleOpenChat = async () => {
-        try {
-            const res = await apiRequest.get(`/users/${id}`);
-            setChatReceiver(res.data);
 
-            const chatResponse = await apiRequest.post('/chats/startChat', {
-                userId1: currentUser._id,
-                userId2: id
-            });
-
-            setChatId(chatResponse.data._id);
-            setIsChatOpen(true);
-        } catch (error) {
-            console.log('Failed to fetch chat receiver:', error);
-            showError('Failed to fetch chat receiver')
-        }
-    };
     const variant1 = {
         initial: {
           y: -500,
@@ -99,7 +81,7 @@ const UserProfile = () => {
                 <p>{profile.email}</p>
                 {
                     currentUser && (
-                        <button onClick={handleOpenChat}>
+                        <button onClick={() => openChat(profile._id)}>
                             <img src="/chat.png" alt="" />
                             Send a Message
                         </button>

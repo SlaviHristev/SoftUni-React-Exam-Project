@@ -10,6 +10,7 @@ import Chat from '../../components/Chat/Chat';
 import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
 import { motion } from 'framer-motion';
+import useOpenChat from '../../hooks/useOpenChat';
 
 const SinglePage = () => {
   const { currentUser, updateUser } = useContext(AuthContext);
@@ -17,11 +18,9 @@ const SinglePage = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatReceiver, setChatReceiver] = useState(null);
-  const [chatId, setChatId] = useState(null);
   const navigate = useNavigate();
   const { showError } = useError();
+  const { isChatOpen, chatReceiver, chatId, openChat, setIsChatOpen } = useOpenChat(currentUser);
 
   useEffect(() => {
     const getPost = async () => {
@@ -73,23 +72,6 @@ const SinglePage = () => {
     } catch (error) {
       console.error('Failed to delete post:', error);
       showError('Failed to delete post')
-    }
-  };
-  const handleOpenChat = async () => {
-    try {
-      const res = await apiRequest.get(`/users/${post.ownerId._id}`);
-      setChatReceiver(res.data);
-
-      const chatResponse = await apiRequest.post('/chats/startChat', {
-        userId1: currentUser._id,
-        userId2: post.ownerId._id
-      });
-
-      setChatId(chatResponse.data._id);
-      setIsChatOpen(true);
-    } catch (error) {
-      console.log('Failed to fetch chat receiver:', error);
-      showError('Failed to fetch chat receiver')
     }
   };
 
@@ -208,7 +190,7 @@ const SinglePage = () => {
             }
             {!isOwner && currentUser &&
               <>
-                <button onClick={handleOpenChat}>
+                <button onClick={() => openChat(post.ownerId._id)}>
                   <img src="/chat.png" alt="" />
                   Send a Message
                 </button>
