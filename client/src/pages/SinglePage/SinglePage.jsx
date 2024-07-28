@@ -11,16 +11,17 @@ import useError from '../../hooks/useError';
 import Spinner from '../../components/Spinner/Spinner';
 import { motion } from 'framer-motion';
 import useOpenChat from '../../hooks/useOpenChat';
+import useSavePost from '../../hooks/useSavePost';
 
 const SinglePage = () => {
-  const { currentUser, updateUser } = useContext(AuthContext);
-  const [isSaved, setIsSaved] = useState(false);
+  const { currentUser } = useContext(AuthContext);
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { showError } = useError();
   const { isChatOpen, chatReceiver, chatId, openChat, setIsChatOpen } = useOpenChat(currentUser);
+   const { isSaved, handleSavePost } = useSavePost(currentUser, post);
 
   useEffect(() => {
     const getPost = async () => {
@@ -37,30 +38,7 @@ const SinglePage = () => {
     };
     getPost();
   }, [id]);
-
-  useEffect(() => {
-    if (currentUser && post) {
-      setIsSaved(currentUser.savedPosts.some(savedPost => savedPost._id === post._id));
-    }
-  }, [currentUser, post]);
-
-  const handleSavePost = async () => {
-    try {
-      const res = await apiRequest.post(`/users/save/${id}`, { userId: currentUser._id });
-      const updatedSavedPosts = isSaved
-        ? currentUser.savedPosts.filter(post => post._id !== id)
-        : [...currentUser.savedPosts, post];
-
-      updateUser(prevUser => ({
-        ...prevUser,
-        savedPosts: updatedSavedPosts
-      }));
-      setIsSaved(!isSaved);
-    } catch (error) {
-      console.log('Failed to toggle save post:', error);
-      showError('Failed to toggle save post')
-    }
-  };
+  
 
   const deletePost = async () => {
     const confirmDelete = window.confirm('Are you sure you want to delete this post?');
@@ -93,7 +71,7 @@ const SinglePage = () => {
     }
   };
 
-  const isOwner = currentUser?._id === post.ownerId._id;
+  const isOwner = currentUser?._id === post.ownerId?._id;
 
   return (
     <div className='singlePage'>

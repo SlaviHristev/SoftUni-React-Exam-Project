@@ -6,65 +6,16 @@ import apiRequest from '../../lib/apiRequest'
 import Chat from '../Chat/Chat'
 import Modal from '../Modal/Modal'
 import useError from '../../hooks/useError'
+import useSavePost from '../../hooks/useSavePost'
+import useOpenChat from '../../hooks/useOpenChat'
 
 
 const Card = ({ item }) => {
-    const {currentUser, updateUser} = useContext(AuthContext);
-    const [isSaved, setIsSaved] = useState(false);
-    const [isChatOpen, setIsChatOpen] = useState(false);
-    const [chatReceiver, setChatReceiver] = useState(null);
-    const [chatId, setChatId] = useState(null);
-    const { showError } = useError();
-
+    const {currentUser} = useContext(AuthContext);
+    const { isSaved, handleSavePost } = useSavePost(currentUser, item);
+    const { isChatOpen, chatReceiver, chatId, openChat, setIsChatOpen } = useOpenChat(currentUser);
     const isOwner = currentUser?._id === item.ownerId;
 
-    useEffect(() => {
-        if (currentUser && currentUser.savedPosts) {
-            setIsSaved(currentUser.savedPosts.some(savedPost => savedPost._id === item._id));
-        }
-    }, [currentUser, item._id]);
-    
-
-    const handleSavePost = async(id) =>{
-        try {
-            const res = await apiRequest.post(`/users/save/${id}`, { userId: currentUser._id });
-            setIsSaved(!isSaved);
-            
-            if (isSaved) {
-                updateUser(prevUser => ({
-                    ...prevUser,
-                    savedPosts: prevUser.savedPosts.filter(post => post._id !== id)
-                }));
-            } else {
-                updateUser(prevUser => ({
-                    ...prevUser,
-                    savedPosts: [...prevUser.savedPosts, item]
-                }));
-            }
-        } catch (error) {
-            console.log('Failed to toggle save post:', error);
-            showError('Failed to toggle save post');
-        }
-    };
-
-    const handleOpenChat = async () => {
-        try {
-          const res = await apiRequest.get(`/users/${item.ownerId}`);
-          setChatReceiver(res.data);
-
-            const chatResponse = await apiRequest.post('/chats/startChat', {
-                userId1: currentUser._id,
-                userId2: item.ownerId
-            });
-
-           setChatId(chatResponse.data._id);     
-          setIsChatOpen(true);
-        } catch (error) {
-          console.log('Failed to fetch chat receiver:', error);
-          showError('Failed to fetch chat receiver')
-        }
-      };
-    
 
     return (
         <div className='card'>
@@ -97,7 +48,7 @@ const Card = ({ item }) => {
                             <div className="icon" style={{ backgroundColor: isSaved ? "orange" : "inherit" }} onClick={() => handleSavePost(item._id)}>
                                 <img src='/save.png'   alt="Save"  />
                             </div>
-                            <div className="icon" onClick={handleOpenChat}>
+                            <div className="icon"  onClick={() => openChat(item.ownerId)}>
                                 <img src="/chat.png" alt="Chat" />
                             </div>
                         </div>
