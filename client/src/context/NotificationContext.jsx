@@ -20,6 +20,7 @@ export const NotificationProvider = ({ children }) => {
                 const response = await apiRequest.get(`/notifications/${currentUser._id}`);
                 setNotifications(response.data);
                 setLoading(false);
+                console.log(notifications);
             } catch (error) {
                 console.error('Failed to fetch notifications', error);
                 setLoading(false);
@@ -31,8 +32,9 @@ export const NotificationProvider = ({ children }) => {
     const markAsRead = async (notificationId) => {
         try {
             await apiRequest.patch(`/notifications/${notificationId}`, { read: true });
-            setNotifications((prevNotifications) =>
-                prevNotifications.map((notification) =>
+            
+            setNotifications((prevNotifications) => 
+                prevNotifications.map((notification) => 
                     notification._id === notificationId ? { ...notification, read: true } : notification
                 )
             );

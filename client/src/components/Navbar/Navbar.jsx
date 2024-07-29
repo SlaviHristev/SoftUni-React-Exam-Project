@@ -23,6 +23,13 @@ const Navbar = () => {
         }
     };
 
+    const toggleNotifications = () => {
+        setShowNotifications((prev) => !prev);
+    };
+
+    const unreadNotifications = notifications.filter(notification => !notification.read);
+    const unreadCount = unreadNotifications.length;
+
     return (
         <nav>
             <div className="leftSide">
@@ -45,10 +52,10 @@ const Navbar = () => {
                             <span>Profile</span>
                         </Link>
                         <Link onClick={handleLogout}>Logout</Link>
-                        <div className="notifications" onClick={() => setShowNotifications(!showNotifications)}>
+                        <div className="notifications" onClick={toggleNotifications}>
                             <img src="/notification.png" alt="Notifications" />
-                            {notifications.length > 0 && <span className="notificationCount">{notifications.length}</span>}
-                            {showNotifications && <Notification />}
+                            {unreadCount > 0 && <span className="notificationCount">{unreadCount}</span>}
+                            {showNotifications && <Notification notifications={unreadNotifications} markAsRead={markAsRead} />}
                         </div>
                     </div>
                 ) : (

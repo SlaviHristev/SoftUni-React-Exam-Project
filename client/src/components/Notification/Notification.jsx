@@ -1,28 +1,16 @@
-import { useNotifications } from '../../context/NotificationContext';
-import Spinner from '../Spinner/Spinner';
 import './notification.scss';
 
-const Notification = () => {
-    const { notifications, loading, markAsRead } = useNotifications();
-
-    if (loading) return <Spinner />;
-
+const Notification = ({ notifications, markAsRead }) => {
     return (
         <div className="notificationList">
-            {notifications.length === 0 ? (
-                <p>No notifications</p>
-            ) : (
-                notifications.map((notification) => (
-                    <div
-                        key={notification._id}
-                        className={`notificationItem ${notification.read ? 'read' : 'unread'}`}
-                        onClick={() => markAsRead(notification._id)}
-                    >
-                        <p>{notification.message}</p>
-                        <span>{new Date(notification.createdAt).toLocaleString()}</span>
-                    </div>
-                ))
-            )}
+            {notifications.map((notification) => (
+                <div key={notification._id} className={`notificationItem ${notification.read ? 'read' : ''}`}>
+                    <p>{notification.message}</p>
+                    {!notification.read && (
+                        <button onClick={() => markAsRead(notification._id)}>Mark as Read</button>
+                    )}
+                </div>
+            ))}
         </div>
     );
 };

@@ -49,6 +49,26 @@ const io = require("socket.io")(8900, {
         console.error(`User not found: ${recieverId}`);
       }
     });
+
+    socket.on("sendNotification", ({ senderId, receiverId, notificationData }) => {
+      const user = getUser(receiverId);
+      console.log("Notification from", senderId, "to", receiverId, ":", notificationData);
+      if (user) {
+          const { socketId } = user;
+          if (socketId) {
+              io.to(socketId).emit("getNotification", {
+                  senderId,
+                  ...notificationData,
+                  createdAt: new Date().toISOString(),
+              });
+          } else {
+              console.error(`Socket ID not found for user: ${receiverId}`);
+          }
+      } else {
+          console.error(`User not found: ${receiverId}`);
+      }
+  });
+
   
     socket.on("disconnect", () => {
       console.log("A user disconnected:", socket.id);
