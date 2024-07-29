@@ -27,21 +27,24 @@ const useSavePost = (currentUser, post) => {
 
     const handleSavePost = async () => {
         try {
+           
             await apiRequest.post(`/users/save/${post._id}`, { userId: currentUser._id });
             setIsSaved(!isSaved);
+
+            
+            if (socket) {
+                socket.emit("sendNotification", {
+                    senderId: currentUser._id,
+                    receiverId: post.ownerId._id,
+                    message: `${currentUser.username} saved your post.`,
+                });
+            }
+
+       
             await apiRequest.post(`/notifications/${post.ownerId._id}`, {
                 userId: post.ownerId._id,
                 type: 'save',
                 message: `${currentUser.username} saved your post.`,
-            });
-            socket.emit('sendNotification', {
-                senderId: currentUser._id,
-                receiverId: post.ownerId._id,
-                notificationData: {
-                    userId: post.ownerId._id,
-                    type: 'save',
-                    message: `${currentUser.username} saved your post.`,
-                }
             });
 
         } catch (error) {

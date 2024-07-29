@@ -28,9 +28,9 @@ const useSocket = (userId) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
-    newSocket.on("getNotification", (notification) => {
-      console.log("New notification received:", notification);
-      setNotifications((prevNotifications) => [...prevNotifications, notification]); 
+    
+    newSocket.on("receiveNotification", (notification) => {
+      setNotifications((prevNotifications) => [...prevNotifications, notification]);
     });
 
     socketRef.current = newSocket;
@@ -51,14 +51,25 @@ const useSocket = (userId) => {
     }
   };
 
+ 
+  const sendNotification = (receiverId, message) => {
+    if (socket) {
+      socket.emit("sendNotification", {
+        senderId: userId,
+        receiverId,
+        message,
+      });
+    }
+  };
+
   return { 
     socket, 
     onlineUsers, 
     messages, 
     setMessages, 
-    sendMessage, 
-    notifications,
-    setNotifications 
+    sendMessage,
+    notifications, 
+    sendNotification,
   };
 };
 

@@ -1,6 +1,10 @@
 import './notification.scss';
 
 const Notification = ({ notifications, markAsRead }) => {
+    if (!notifications.length) {
+        return <div>No notifications available.</div>;
+    }
+
     return (
         <div className="notificationList">
             {notifications.map((notification) => (
