@@ -15,6 +15,7 @@ import { ErrorProvider } from './context/ErrorContext'
 import ErrorPopUp from './components/ErrorPopUp/ErrorPopUp'
 import NotFound from './pages/NotFound/NotFound'
 import UserProfile from './pages/UserProfile/UserProfile'
+import { NotificationProvider } from './context/NotificationContext'
 
 
 function App() {
@@ -58,8 +59,8 @@ function App() {
           element: <UserProfile />
         },
         {
-          path:'*',
-          element:<NotFound/>
+          path: '*',
+          element: <NotFound />
         }
       ]
     },
@@ -84,22 +85,24 @@ function App() {
           element: <ProfileUpdate />
         },
         {
-          path:'*',
-          element:<NotFound/>
+          path: '*',
+          element: <NotFound />
         }
 
       ]
     },
     {
-      path:'*',
-      element:<NotFound/>
+      path: '*',
+      element: <NotFound />
     }
   ])
   return (
     <>
       <ErrorProvider>
-        <ErrorPopUp />
-        <RouterProvider router={router} />
+        <NotificationProvider>
+          <ErrorPopUp />
+          <RouterProvider router={router} />
+        </NotificationProvider>
       </ErrorProvider>
     </>
   )
