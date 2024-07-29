@@ -27,6 +27,12 @@ const useSavePost = (currentUser, post) => {
     try {
         await apiRequest.post(`/users/save/${post._id}`, { userId: currentUser._id });
         setIsSaved(!isSaved);
+        console.log(post.ownerId);
+        await apiRequest.post(`/notifications/${post.ownerId._id}`, {
+            userId: post.ownerId._id,
+            type: 'save',
+            message: `${currentUser.username} saved your post.`,
+        });
     } catch (error) {
         console.log('Failed to toggle save post:', error);
         showError('Failed to toggle save post');
