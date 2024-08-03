@@ -27,26 +27,22 @@ const useSavePost = (currentUser, post) => {
 
     const handleSavePost = async () => {
         try {
-           
             await apiRequest.post(`/users/save/${post._id}`, { userId: currentUser._id });
             setIsSaved(!isSaved);
-
-            
+    
             if (socket) {
                 socket.emit("sendNotification", {
                     senderId: currentUser._id,
-                    receiverId: post.ownerId._id,
+                    receiverId: post.ownerId._id || post.ownerId,
                     message: `${currentUser.username} saved your post.`,
                 });
             }
-
-       
+    
             await apiRequest.post(`/notifications/${post.ownerId._id}`, {
-                userId: post.ownerId._id,
+                userId: post.ownerId._id || post.ownerId,
                 type: 'save',
                 message: `${currentUser.username} saved your post.`,
             });
-
         } catch (error) {
             console.log('Failed to toggle save post:', error);
             showError('Failed to toggle save post');
