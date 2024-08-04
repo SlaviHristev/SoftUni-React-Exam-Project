@@ -125,7 +125,7 @@ const Profile = () => {
                             {
                                 userPosts.length > 0 ? (
                                     userPosts.map(post => (
-                                        <div className="post" key={post.id}>
+                                        <div className="post" key={post._id}>
                                             <Card item={post} />
                                         </div>
                                     ))

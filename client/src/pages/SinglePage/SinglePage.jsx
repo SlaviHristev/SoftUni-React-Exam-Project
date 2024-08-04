@@ -91,12 +91,19 @@ const SinglePage = () => {
                   <p>Price:</p>
                   $ {post.price}</div>
               </div>
-              <Link to={`/profiles/${post.ownerId._id}`} >
+              {isOwner ? (
                 <div className="user">
-                  <img src={post.ownerId.avatar || '/noavatar.jpg'} alt="" />
-                  <span>{post.ownerId.username}</span>
+                  <img src={currentUser.avatar || '/noavatar.jpg'} alt="" />
+                  <span>{currentUser.username} (You)</span>
                 </div>
-              </Link>
+              ) : (
+                <Link to={`/profiles/${post.ownerId._id}`}>
+                  <div className="user">
+                    <img src={post.ownerId.avatar || '/noavatar.jpg'} alt="" />
+                    <span>{post.ownerId.username}</span>
+                  </div>
+                </Link>
+              )}
             </div>
             <div className="bottom" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.description) }}>
               { }
