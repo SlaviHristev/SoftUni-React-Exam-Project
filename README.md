@@ -11,6 +11,7 @@ Welcome to the Car Shop Project! This is a web application where users can buy, 
 * Register Page: Create a new user account.
 * Login Page: Log into an existing user account.
 * Details Page: View detailed information about a specific post, including images and description.
+* Not Found Page: Displays a 404 error for invalid routes.
 ## For Logged-In Users
 * Create Page: Create a new post to sell a car.
 * Profile Page: View your profile, including your saved posts, created posts, and conversations.
@@ -33,6 +34,8 @@ Welcome to the Car Shop Project! This is a web application where users can buy, 
 ## Image Upload
 * Create Post: Upload multiple images using the Cloudinary upload widget.
 * Update Profile: Upload a profile picture.
+## Smooth Transitions
+* Framer Motion: Utilize Framer Motion to create smooth and appealing transitions between pages.
 # Dependencies
 ## Client
 * Main Dependencies: React, Axios, DOMPurify, Framer Motion, React Router DOM, React Slick, Sass, Socket.io Client.
