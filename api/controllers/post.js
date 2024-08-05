@@ -20,12 +20,12 @@ export const addPost = async (req, res) => {
             const messages = Object.values(error.errors).map(err => err.message);
             res.status(400).json({ errors: messages });
         } else if (error.code === 11000) {
-            
-            const field = Object.keys(error.keyValue)[0]; 
-            const value = error.keyValue[field]; 
+
+            const field = Object.keys(error.keyValue)[0];
+            const value = error.keyValue[field];
             res.status(400).json({ errors: [`${field} "${value}" already exists`] });
         } else {
-           
+
             console.error('Server error:', error);
             res.status(500).json({ message: "Failed to create user!" });
         }
@@ -48,12 +48,12 @@ export const getPosts = async (req, res) => {
 export const getPost = async (req, res) => {
     const id = req.params.id;
     try {
-        const post = await Car.findById(id).populate('ownerId', 'username avatar' );
+        const post = await Car.findById(id).populate('ownerId', 'username avatar');
 
         if (!post) {
             return res.status(404).json({ message: "Post not found!" });
         }
-        
+
         res.status(200).json(post);
     } catch (error) {
         console.log(error);
@@ -111,19 +111,19 @@ export const getRecent = async (req, res) => {
 };
 
 
-export const getPostsByUser = async(req,res) =>{
+export const getPostsByUser = async (req, res) => {
     try {
-      const userId = req.params.id;
-      console.log(userId);
-      const posts =  await Car.find({ownerId: userId}).sort({createdAt: -1});
-      res.status(200).json(posts)
+        const userId = req.params.id;
+        console.log(userId);
+        const posts = await Car.find({ ownerId: userId }).sort({ createdAt: -1 });
+        res.status(200).json(posts)
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Failed to get user posts" });
     }
-  }
+}
 
-  export const searchPosts = async(req,res) =>{
+export const searchPosts = async (req, res) => {
     const { fuelType, category, city, minPrice, maxPrice } = req.query;
     const filter = {
         ...(fuelType && { fuelType }),
@@ -131,11 +131,18 @@ export const getPostsByUser = async(req,res) =>{
         ...(city && { city }),
         ...(minPrice && { price: { $gte: minPrice } }),
         ...(maxPrice && { price: { $lte: maxPrice } }),
-      };
-      try {
+    };
+
+    if (minPrice && maxPrice) {
+        filter.price = {
+            $gte: Number(minPrice),
+            $lte: Number(maxPrice),
+        };
+    }
+    try {
         const posts = await Car.find(filter);
         res.status(200).json(posts);
-      } catch (error) {
+    } catch (error) {
         res.status(500).json({ message: 'Failed to fetch posts' });
-      }
-  }
+    }
+}

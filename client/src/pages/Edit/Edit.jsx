@@ -105,10 +105,11 @@ const Edit = () => {
             showError('City must be at least 3 characters long');
             return;
         }
-        if(value.length < 10){
+        if(value.length < 10 || value === '<p><br></p>'){
             showError('Description must be at least 10 characters long');
             return;
         }
+        console.log(value);
 
         try {
             const updatedPost = {
