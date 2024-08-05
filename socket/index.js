@@ -29,9 +29,9 @@ const io = require("socket.io")(8900, {
       io.emit("getUsers", users);
     });
   
-    socket.on("sendMessage", ({ senderId, recieverId, text }) => {
-      const user = getUser(recieverId);
-      console.log("Message from", senderId, "to", recieverId, ":", text);
+    socket.on("sendMessage", ({ senderId, receiverId, text }) => {
+      const user = getUser(receiverId);
+      console.log("Message from", senderId, "to", receiverId, ":", text);
       if (user) {
         const { socketId } = user;
         if (socketId) {
@@ -43,10 +43,10 @@ const io = require("socket.io")(8900, {
           io.to(socketId).emit("getMessage", message);
           io.emit("newMessage", message);
         } else {
-          console.error(`Socket ID not found for user: ${recieverId}`);
+          console.error(`Socket ID not found for user: ${receiverId}`);
         }
       } else {
-        console.error(`User not found: ${recieverId}`);
+        console.error(`User not found: ${receiverId}`);
       }
     });
 
