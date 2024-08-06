@@ -5,10 +5,12 @@ import apiRequest from '../../lib/apiRequest';
 import useError from '../../hooks/useError';
 import { useContext } from 'react';
 import { motion } from 'framer-motion';
+import useRedirectIfLoggedIn from '../../hooks/useRedirectIfLoggedIn';
 
 
 
 const Login = () => {
+  useRedirectIfLoggedIn();
 
   const { updateUser } = useContext(AuthContext);
   const { showError } = useError();

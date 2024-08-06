@@ -3,8 +3,11 @@ import './register.scss'
 import apiRequest from '../../lib/apiRequest';
 import useError from '../../hooks/useError';
 import {motion} from 'framer-motion';
+import useRedirectIfLoggedIn from '../../hooks/useRedirectIfLoggedIn';
 
 const Register = () => {
+  useRedirectIfLoggedIn()
+
   const navigate = useNavigate();
   const { showError } = useError();
 
