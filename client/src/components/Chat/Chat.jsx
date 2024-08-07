@@ -33,6 +33,7 @@ const Chat = ({
     useEffect(() => {
         if (messages.length > 0) {
             const latestMessage = messages[messages.length - 1];
+            console.log("Latest Message:", latestMessage);
             setChatMessages(prevMessages => [...prevMessages, latestMessage]);
         }
     }, [messages]);
@@ -75,7 +76,7 @@ const Chat = ({
                 </div>
                 <div className="center">
                     {chatMessages.map(message => (
-                        <div className="chatMessage" key={message._id}
+                        <div className="chatMessage" key={message._id || message.createdAt}
                             style={{
                                 alignSelf: getSenderId(message) === String(currentUser._id) ? 'flex-end' : 'flex-start',
                                 textAlign: getSenderId(message) === String(currentUser._id) ? "right" : "left"

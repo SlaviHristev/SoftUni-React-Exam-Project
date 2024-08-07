@@ -8,9 +8,14 @@ const io = require("socket.io")(8900, {
   
   const addUser = (userId, socketId) => {
     console.log("Adding user:", userId, socketId);
-    !users.some((user) => String(user.userId) === String(userId)) &&
-      users.push({ userId, socketId });
-  };
+    if (!users.some(user => String(user.userId) === String(userId))) {
+        users.push({ userId, socketId });
+        console.log("User added:", { userId, socketId });
+        console.log("Current users:", users); 
+    } else {
+        console.log("User already exists:", userId);
+    }
+};
   
   const removeUser = (socketId) => {
     users = users.filter((user) => String(user.socketId) !== String(socketId));
@@ -41,6 +46,7 @@ const io = require("socket.io")(8900, {
             createdAt: new Date().toISOString(), 
           };
           io.to(socketId).emit("getMessage", message);
+          console.log("Message sent to socket:", socketId);
           io.emit("newMessage", message);
         } else {
           console.error(`Socket ID not found for user: ${receiverId}`);

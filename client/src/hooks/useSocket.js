@@ -25,8 +25,12 @@ const useSocket = (userId) => {
     });
 
     newSocket.on("getMessage", (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+      setMessages((prevMessages) => {
+          const updatedMessages = [...prevMessages, message];
+          console.log("Updated Messages:", updatedMessages);
+          return updatedMessages;
+      });
+  });
 
     
     newSocket.on("receiveNotification", (notification) => {
